@@ -97,6 +97,15 @@ h1{font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,var(--gold
 .reset-btn{background:none;border:1px solid rgba(255,255,255,.15);color:var(--text-soft);padding:.5rem 1.5rem;border-radius:20px;font-size:.78rem;cursor:pointer;margin-top:.8rem;font-family:inherit}
 .reset-btn:hover{border-color:var(--purple);color:var(--purple)}
 
+.mode-tabs{display:flex;gap:.5rem;justify-content:center;margin-bottom:1.2rem}
+.mode-tab{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-soft);padding:.5rem 1.2rem;border-radius:20px;font-size:.85rem;cursor:pointer;font-family:inherit;transition:all .3s}
+.mode-tab.active{background:linear-gradient(135deg,rgba(167,139,250,.25),rgba(244,114,182,.2));border-color:var(--purple);color:#fff}
+.question-box{margin-bottom:1.2rem;animation:fadeUp .4s ease}
+.question-box input{width:100%;padding:.7rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;color:var(--text);font-size:.9rem;font-family:inherit;outline:none;text-align:center}
+.question-box input:focus{border-color:var(--purple);box-shadow:0 0 15px rgba(167,139,250,.15)}
+.question-box input::placeholder{color:var(--text-soft)}
+.question-hint{font-size:.72rem;color:var(--text-soft);margin-top:.4rem;opacity:.7}
+.card-back .question-echo{font-size:.78rem;color:var(--purple);margin-bottom:.5rem;padding:.3rem .8rem;background:rgba(167,139,250,.1);border-radius:8px}
 .footer{margin-top:2rem;font-size:.7rem;color:rgba(255,255,255,.2);padding-bottom:2rem}
 </style>
 </head>
@@ -106,6 +115,15 @@ h1{font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,var(--gold
   <h1>✨ 每日一签</h1>
   <div class="subtitle">今天的宇宙想对你说什么？</div>
   <div class="date" id="dateDisplay"></div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="switchMode('daily')">🌅 每日一签</button>
+    <button class="mode-tab" onclick="switchMode('question')">🔮 心事求签</button>
+  </div>
+  <div class="question-box" id="questionBox" style="display:none">
+    <input type="text" id="questionInput" placeholder="写下你的心事或问题..." maxlength="50">
+    <div class="question-hint">比如：我该不该换工作？这段感情值得继续吗？</div>
+  </div>
 
   <div class="card-container" id="cardContainer" onclick="flipCard()">
     <div class="card-inner" id="cardInner">
@@ -143,7 +161,7 @@ h1{font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,var(--gold
 
     <button class="share-btn" onclick="shareCard()">📸 保存分享</button>
     <br>
-    <button class="reset-btn" onclick="resetCard()">🔄 再抽一次（明天更准哦）</button>
+    <button class="reset-btn" id="resetBtn" onclick="resetCard()">🔄 再抽一次（明天更准哦）</button>
   </div>
 
   <div class="footer">✨ 每日一签 · 用正能量开启每一天</div>
@@ -220,6 +238,45 @@ const CARDS = [
    msg:'恭喜！你正在走向一个圆满的时刻。之前的坚持和努力终于开花结果。享受这份成就感，你值得为自己骄傲。',
    wish:'愿你拥有完整而丰盛的人生'},
 ];
+
+// ===== QUESTION READINGS (per card, by topic) =====
+// Topics: love, career, study, relationship, choice
+const Q_READINGS = {
+  '愚者':{love:'这段感情充满新鲜感，勇敢去表达你的心意。不完美没关系，真心最珍贵。',career:'新的机会正在向你招手，别犹豫了。有时候，放手一搏比原地踏步更值得。',study:'换个学习方法或方向，你会发现全新的天地。保持好奇心是你最大的天赋。',relationship:'放下偏见，用全新的眼光去看待对方。也许你会发现意想不到的惊喜。',choice:'听从直觉，选那个让你兴奋的。人生太短，不要总选"安全"的路。'},
+  '魔术师':{love:'你有魅力去吸引对的人，展现真实的自己就是最好的告白。',career:'你的能力完全够格，是时候展示出来了。相信自己能创造奇迹。',study:'你的理解力很强，找到适合的方法就能事半功倍。',relationship:'主动表达善意，你有化解矛盾的能力。',choice:'你有能力掌控局面，相信自己的判断。'},
+  '女祭司':{love:'答案在你内心深处。安静下来，感受那个人给你的真实感觉。',career:'不急着做决定，先观察再行动。你的直觉会告诉你真相。',study:'深度思考比盲目刷题更有效。给自己一些独处的学习时间。',relationship:'对方可能有没说出口的话，耐心倾听比急于表态更重要。',choice:'这件事不需要急。等内心平静的时候，答案自然会浮现。'},
+  '女皇':{love:'爱自己是吸引爱情的最好方式。你值得被温柔以待。',career:'你的温暖和亲和力是职场上的宝藏。用柔软的力量去影响他人。',study:'享受学习的过程，不要只盯着结果。在美好的环境中效率更高。',relationship:'用关怀和包容去经营关系，你会收获满满的回报。',choice:'选让你感到被滋养的那个，生活需要美好的细节。'},
+  '皇帝':{love:'在感情中也需要适当的原则和底线，温柔而坚定。',career:'你有领导力，勇敢承担更大的责任。你比自己以为的更强。',study:'制定计划并坚持执行，纪律是成功的基石。',relationship:'做那个可以依靠的人，但也别忘了表达柔软的一面。',choice:'果断一点，选好了就全力以赴。你有掌控全局的能力。'},
+  '教皇':{love:'找一个能和你交流精神世界的人，灵魂的契合比什么都重要。',career:'向前辈请教，接受指导。站在巨人的肩膀上你能看得更远。',study:'找一个好老师或学习伙伴，有人引路会少走很多弯路。',relationship:'互相尊重彼此的信念和价值观，这是长久关系的基础。',choice:'参考过来人的经验，但最终决定权在你自己手里。'},
+  '恋人':{love:'这段关系有美好的可能性，用心经营就会开花结果。',career:'选择与你价值观一致的工作环境，快乐工作才能持久。',study:'找到你真正热爱的方向，热情是最好的老师。',relationship:'坦诚相待，真心换真心。这段关系值得你用心投入。',choice:'跟着心走。当头脑犹豫时，心知道正确的答案。'},
+  '战车':{love:'主动出击！喜欢就去表达，等待只会让机会溜走。',career:'现在是冲刺的好时机，你的努力一定会有回报。',study:'全力以赴，目标就在前方。你有冲过终点线的实力。',relationship:'有话直说，别犹豫。坦诚的交流比委婉的暗示更有力。',choice:'勇敢选那个有挑战的，你有赢的实力。'},
+  '力量':{love:'用耐心和温柔去化解感情中的难题，强硬反而适得其反。',career:'面对压力时保持冷静，内在的力量比外在的强势更持久。',study:'遇到难题别急躁，慢慢来反而更快。持续的努力终会突破。',relationship:'温柔地坚持你的立场，不需要妥协也不需要争吵。',choice:'不急不躁，用温和的方式坚持你的选择。'},
+  '隐士':{love:'先学会独处，才能在关系中不迷失。享受一个人的时光。',career:'适合独立思考和深度工作，远离喧嚣你能产出最好的作品。',study:'安静的环境最适合你现在的状态，一个人专注效率最高。',relationship:'给彼此一些空间，距离产生的不只是美，还有思念和珍惜。',choice:'找个安静的地方，一个人想想。答案就在内心深处等你。'},
+  '命运之轮':{love:'缘分的转盘正在转动，保持开放的心态，惊喜就在转角。',career:'运势正在上升，之前积累的努力即将迎来回报期。',study:'好运开始眷顾你，抓住这波势头多多努力。',relationship:'关系正在往好的方向变化，耐心等待就好。',choice:'时机很好，勇敢做出选择。宇宙在你这边。'},
+  '正义':{love:'公平地对待感情，也公平地对待自己。你值得对等的爱。',career:'你的努力会得到公正的回报，坚持做正确的事。',study:'踏实学习一定有收获，不要走捷径。',relationship:'以诚待人，种什么因得什么果。',choice:'选对的，而不是选容易的。你知道哪个是对的。'},
+  '倒吊人':{love:'换个角度看你们的关系，也许你会理解对方为什么那样做。',career:'卡住的时候不如暂停一下，休息也是一种策略。',study:'换个思路，试试完全不同的方法。突破往往来自意想不到的角度。',relationship:'试着站在对方的角度想想，你会有全新的理解。',choice:'不一定非要现在做决定。换个角度再想想，也许第三种选择更好。'},
+  '死神':{love:'旧的不去新的不来。如果一段关系真的走到尽头，放手也是一种勇敢。',career:'旧的阶段即将结束，新的篇章即将开始。蜕变的过程虽然不舒服，但终点是美好的。',study:'放弃不适合的方法，拥抱新的学习方式。破茧才能成蝶。',relationship:'有些关系需要更新迭代，不适合的就优雅地放下。',choice:'不要害怕改变。结束一件事，才能开始更好的。'},
+  '节制':{love:'感情需要平衡，付出和接受都要适度。不急不躁地经营。',career:'工作和生活需要平衡，别让任何一边失控。',study:'劳逸结合，张弛有度。过度用功反而效率下降。',relationship:'找到相处的节奏，不过分亲密也不过分疏远。',choice:'不走极端，找一个平衡的中间路线。'},
+  '恶魔':{love:'检视这段关系中是否有不健康的依赖，真正的爱是自由的。',career:'打破限制你的旧观念！"我不行"只是借口，你完全可以。',study:'别被恐惧束缚，那些"太难了"的想法都是纸老虎。',relationship:'不要被习惯绑架，不舒服的关系就勇敢调整。',choice:'选让你获得自由的那个，而不是让你舒适的那个。'},
+  '塔':{love:'虽然现在可能有波折，但打破旧的才能迎来更好的。相信过程。',career:'突如其来的变化其实是在帮你清路。塌掉的是该塌的，留下的才是根基。',study:'旧方法行不通就果断放弃，有时候推倒重来比修修补补更高效。',relationship:'冲突不一定是坏事，有些话说开了反而更亲近。',choice:'即使选择带来震荡，也比停滞不前好。风雨过后是彩虹。'},
+  '星星':{love:'满怀希望地去爱。你的真心一定会遇到对的人。',career:'光明就在前方，保持信念继续前行。',study:'你走在正确的路上，不要因为暂时的困难就失去信心。',relationship:'真诚和善良终会被看见，保持你的那颗星星般的心。',choice:'选那个让你充满希望的。有光的地方就是方向。'},
+  '月亮':{love:'感情中有些模糊的地方需要澄清，别光靠猜测。',career:'直觉很敏锐，但也要验证。把那些灵感记下来，择日再做决定。',study:'现在状态适合发挥创造力，写作、设计、艺术相关尤其顺利。',relationship:'有些事情不要只靠感觉判断，找机会当面聊聊。',choice:'现在信息不够清晰，等迷雾散去再决定更稳妥。'},
+  '太阳':{love:'恋爱运超好！散发你的热情和光芒，爱情自然来找你。',career:'做什么都顺利，是展示自己的最佳时机。',study:'状态极佳，学什么都能快速吸收。',relationship:'你的好心情会感染周围的人，享受这段快乐的时光。',choice:'选那个让你最开心的！快乐就是最好的指南针。'},
+  '审判':{love:'是时候面对感情中一直回避的问题了。面对之后你会获得解脱。',career:'倾听内心的召唤，你的使命可能比现在的工作更伟大。',study:'回顾总结过去的学习，查漏补缺，为新阶段做准备。',relationship:'有些话该说就说，有些账该清就清。清理完你会感到轻松。',choice:'跟随内心的声音，你的灵魂知道该走哪条路。'},
+  '世界':{love:'这段感情正在走向圆满，珍惜眼前人。',career:'一个阶段即将完美收尾，准备迎接更大的舞台。',study:'你即将取得重要的成果，为自己的坚持感到骄傲。',relationship:'关系达到一个美好的平衡点，享受这份和谐。',choice:'无论怎么选都会是好结果，因为你已经具备了成功的条件。'},
+};
+
+// ===== Question topic detection =====
+function detectTopic(q){
+  q = q.toLowerCase();
+  if(/爱|喜欢|暗恋|表白|分手|对象|男朋友|女朋友|老公|老婆|恋爱|感情|复合|前任|约会|相亲|结婚|恋人|心动/.test(q)) return 'love';
+  if(/工作|升职|加薪|跳槽|换工作|事业|老板|面试|offer|创业|辞职|职业|同事|项目/.test(q)) return 'career';
+  if(/学习|考试|成绩|高考|留学|论文|毕业|读书|专业|上学|研究|备考|复习|GPA|IB/.test(q)) return 'study';
+  if(/朋友|友情|闺蜜|同学|家人|父母|妈妈|爸爸|婆婆|关系|相处|吵架|矛盾|冷战/.test(q)) return 'relationship';
+  return 'choice'; // default
+}
+
+const TOPIC_LABELS = {love:'💕 感情指引',career:'💼 事业指引',study:'📖 学业指引',relationship:'🤝 人际指引',choice:'🔮 决策指引'};
 
 // ===== AFFIRMATIONS =====
 const AFFIRMATIONS = [
@@ -305,17 +362,78 @@ document.getElementById('dateDisplay').textContent =
 
 // Flip
 var flipped = false;
+var currentMode = 'daily'; // 'daily' or 'question'
+var currentCard = todayCard; // card being displayed
+var currentQuestion = '';
+
+function switchMode(mode){
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.mode-tab[onclick*="${mode}"]`).classList.add('active');
+  document.getElementById('questionBox').style.display = mode==='question' ? 'block' : 'none';
+  // Reset card for new mode
+  resetCard();
+  if(mode==='daily'){
+    document.querySelector('.card-front .symbol').textContent = '🔮';
+    document.querySelector('.card-front .tap-hint').textContent = '✨ 轻触翻牌 ✨';
+  } else {
+    document.querySelector('.card-front .symbol').textContent = '🔮';
+    document.querySelector('.card-front .tap-hint').textContent = '✨ 心中默念问题，然后翻牌 ✨';
+  }
+}
+
 function flipCard(){
   if(flipped) return;
+
+  if(currentMode === 'question'){
+    // Pick a random card based on question text (different from daily)
+    const q = document.getElementById('questionInput').value.trim();
+    if(!q){
+      document.getElementById('questionInput').style.borderColor = '#f472b6';
+      document.getElementById('questionInput').placeholder = '请先写下你的问题哦 💭';
+      setTimeout(()=>{
+        document.getElementById('questionInput').style.borderColor = '';
+        document.getElementById('questionInput').placeholder = '写下你的心事或问题...';
+      }, 2000);
+      return;
+    }
+    currentQuestion = q;
+    // Generate card based on question hash (different from daily card)
+    let hash = 0;
+    for(let i=0;i<q.length;i++) hash = ((hash<<5)-hash) + q.charCodeAt(i) + seed;
+    hash = Math.abs(hash);
+    currentCard = CARDS[hash % CARDS.length];
+  } else {
+    currentCard = todayCard;
+    currentQuestion = '';
+  }
+
   flipped = true;
-  // Fill card back
+
+  // Determine message
+  let msg = currentCard.msg;
+  let wish = currentCard.wish;
+  let extraHTML = '';
+
+  if(currentMode === 'question' && currentQuestion){
+    const topic = detectTopic(currentQuestion);
+    const topicLabel = TOPIC_LABELS[topic];
+    const qReading = Q_READINGS[currentCard.name];
+    if(qReading && qReading[topic]){
+      msg = qReading[topic];
+    }
+    extraHTML = `<div class="question-echo">💭 "${currentQuestion}"</div>
+                <div style="font-size:.7rem;color:var(--purple);margin-bottom:.4rem">${topicLabel}</div>`;
+  }
+
   document.getElementById('cardBack').innerHTML = `
-    <div class="card-emoji">${todayCard.emoji}</div>
-    <div class="card-name">${todayCard.name}</div>
-    <div class="card-name-en">${todayCard.en}</div>
-    <div class="card-keyword">${todayCard.keywords.map(k=>`<span class="kw">${k}</span>`).join('')}</div>
-    <div class="card-msg">${todayCard.msg}</div>
-    <div class="card-wish">${todayCard.wish} 💫</div>
+    ${extraHTML}
+    <div class="card-emoji">${currentCard.emoji}</div>
+    <div class="card-name">${currentCard.name}</div>
+    <div class="card-name-en">${currentCard.en}</div>
+    <div class="card-keyword">${currentCard.keywords.map(k=>`<span class="kw">${k}</span>`).join('')}</div>
+    <div class="card-msg">${msg}</div>
+    <div class="card-wish">${wish} 💫</div>
   `;
   document.getElementById('cardInner').classList.add('flipped');
 
@@ -474,21 +592,36 @@ function _doShare(btn){
   ctx.roundRect(cardX, cardY, cardW, cardH, cardR);
   ctx.fill();
 
+  // Question echo (if in question mode)
+  var contentStartY = 210;
+  if(currentQuestion){
+    fillText('💭 "' + currentQuestion + '"', W/2, 195, '18px sans-serif', '#a78bfa');
+    const topicLabel = TOPIC_LABELS[detectTopic(currentQuestion)];
+    fillText(topicLabel, W/2, 218, '14px sans-serif', '#a8a3c0');
+    contentStartY = 245;
+  }
+
   // Card emoji
-  fillText(todayCard.emoji, W/2, 230, '60px sans-serif', '#fff');
+  fillText(currentCard.emoji, W/2, contentStartY+20, '60px sans-serif', '#fff');
   // Card name
-  fillText(todayCard.name, W/2, 290, 'bold 32px sans-serif', '#f5c542');
-  fillText(todayCard.en, W/2, 320, '18px sans-serif', '#a8a3c0');
+  fillText(currentCard.name, W/2, contentStartY+80, 'bold 32px sans-serif', '#f5c542');
+  fillText(currentCard.en, W/2, contentStartY+110, '18px sans-serif', '#a8a3c0');
 
   // Keywords
-  const kwStr = todayCard.keywords.join('  ·  ');
-  fillText(kwStr, W/2, 358, '18px sans-serif', '#a78bfa');
+  const kwStr = currentCard.keywords.join('  ·  ');
+  fillText(kwStr, W/2, contentStartY+145, '18px sans-serif', '#a78bfa');
 
-  // Message
-  const msgEndY = wrapText(todayCard.msg, W/2, 405, '22px sans-serif', '#e2e0ef', 440, 34);
+  // Message - get the right one
+  var shareMsg = currentCard.msg;
+  if(currentQuestion){
+    const topic = detectTopic(currentQuestion);
+    const qr = Q_READINGS[currentCard.name];
+    if(qr && qr[topic]) shareMsg = qr[topic];
+  }
+  const msgEndY = wrapText(shareMsg, W/2, contentStartY+190, '22px sans-serif', '#e2e0ef', 440, 34);
 
   // Wish
-  fillText(todayCard.wish + ' 💫', W/2, msgEndY + 45, 'italic 20px sans-serif', '#f472b6');
+  fillText(currentCard.wish + ' 💫', W/2, msgEndY + 45, 'italic 20px sans-serif', '#f472b6');
 
   // Energy bars
   let barY = 710;

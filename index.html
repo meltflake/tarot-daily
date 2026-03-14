@@ -9,8 +9,10 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue','Segoe UI',Roboto,sans-serif;background:#fcfbff;color:#1e1930;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-x:hidden}
 .container{text-align:center;padding:2rem 1.2rem;max-width:420px;width:100%}
-h1{font-size:1.8rem;font-weight:700;color:#2a2045;margin-bottom:.4rem}
-.subtitle{font-size:.88rem;color:#8a80a0;margin-bottom:2.5rem}
+.title-row{display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:.4rem}
+.title-star{font-size:1rem;color:#c5b8e0}
+h1{font-size:1.8rem;font-weight:700;color:#2a2045;margin:0}
+.subtitle{font-size:.88rem;color:#8a80a0;margin-bottom:2.5rem;text-align:center}
 .cards{display:flex;flex-direction:column;gap:1.2rem}
 .entry-card{
   background:#f8f6ff;border:1px solid rgba(140,120,180,.12);
@@ -26,7 +28,7 @@ h1{font-size:1.8rem;font-weight:700;color:#2a2045;margin-bottom:.4rem}
 </head>
 <body>
 <div class="container">
-  <h1 id="siteTitle"></h1>
+  <div class="title-row"><span class="title-star">✦</span><h1 id="siteTitle"></h1><span class="title-star">✦</span></div>
   <div class="subtitle" id="siteSub"></div>
   <div class="cards">
     <a class="entry-card" href="daily.html">

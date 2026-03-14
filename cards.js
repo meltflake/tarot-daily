@@ -4,7 +4,7 @@ function t(obj){ return (typeof obj === 'string') ? obj : (obj[LANG] || obj.en |
 
 // ===== UI TEXTS =====
 var UI = {
-  site_name: {zh:'✨ 塔罗能量站',en:'✨ Tarot Energy'},
+  site_name: {zh:'塔罗能量站',en:'Tarot Energy'},
   site_sub: {zh:'用正能量开启每一天',en:'Start every day with positive energy'},
   daily_title: {zh:'每日一签',en:'Daily Tarot'},
   daily_desc: {zh:'每天一张专属塔罗牌<br>爱情·事业·幸运 能量全掌握',en:'Your personal daily tarot card<br>Love · Career · Luck energy revealed'},

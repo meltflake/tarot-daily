@@ -170,7 +170,7 @@ function shareCard(){
     ctx.textBaseline='middle';ft('✨ '+t(todayCard.wish),w/2,cy,'15px sans-serif','rgba(140,125,170,1)');ctx.textBaseline='alphabetic';cy+=55;
     ft('💕 '+love+'%    💼 '+work+'%    🍀 '+luck+'%',w/2,cy,'12px sans-serif','rgba(200,195,218,1)');
     // QR at bottom
-    var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',96);
+    var qrc=generateQRCanvas('https://tarot.1yong.com',96);
     var qy=h-150;ctx.globalAlpha=0.92;ctx.drawImage(qrc,w/2-24,qy,48,48);ctx.globalAlpha=1;
     ft(LANG==='zh'?'长按识别 · 抽你的每日一签':'Scan · Draw your daily tarot',w/2,qy+62,'11px sans-serif','rgba(218,214,232,1)');
     showShareModal(c.toDataURL('image/png'));

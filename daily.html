@@ -188,8 +188,8 @@ function shareCard(){
     // Affirmation
     ft('" '+t(todayCard.wish)+' "',cx,y,'14px -apple-system,sans-serif','rgba(150,135,175,1)');y+=48;
     // Lucky items
-    var lColor=t(todayCard.luckyColor),lNum=todayCard.luckyNum,lThing=t(todayCard.luckyThing);
-    var items=[[todayCard.luckyColorEmoji||'🎨',lColor],[String(lNum),'🔢'],[todayCard.luckyThingEmoji||'🍀',lThing]];
+    var lColor=t(todayColor.name),lNum=todayNum,lThing=t(todayThing.name);
+    var items=[[todayColor.icon,lColor],['🔢',String(lNum)],[todayThing.icon,lThing]];
     for(var li=0;li<3;li++){
       var ix=cx-150+li*150;
       ft(items[li][0],ix,y,'18px sans-serif','rgba(80,70,100,1)');

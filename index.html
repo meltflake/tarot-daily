@@ -5,64 +5,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>每日一签 ✨</title>
 <meta name="description" content="每天一张塔罗牌，给你满满正能量 ✨">
-<meta property="og:title" content="每日一签 ✨">
-<meta property="og:description" content="今天的宇宙想对你说什么？翻开你的每日塔罗牌 🔮">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0f0a1a;--gold:#f5c542;--purple:#a78bfa;--pink:#f472b6;--text:#e2e0ef;--text-soft:#a8a3c0}
+:root{
+  --bg:#f5f0e8;--card-bg:#fffdf7;--accent:#5a7247;--accent-light:#8fa97a;
+  --gold:#b8860b;--brown:#6b4f3a;--text:#3d3427;--text-soft:#7a6e5d;
+  --leaf:#92b06a;--bark:#a0845c;
+}
 body{font-family:'Noto Serif SC',serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-x:hidden;
-  background-image:radial-gradient(ellipse at 20% 50%,rgba(120,80,200,.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(200,120,255,.06) 0%,transparent 50%)}
-.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
-.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s)}
-@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.8;transform:scale(1.2)}}
+  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2392b06a' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+/* Floating leaves */
+.leaves{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.leaf{position:absolute;font-size:1.2rem;opacity:.3;animation:fall var(--d,8s) linear infinite var(--delay,0s)}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:0}10%{opacity:.3}90%{opacity:.3}100%{transform:translateY(calc(100vh + 20px)) rotate(360deg);opacity:0}}
 .container{position:relative;z-index:1;text-align:center;padding:2rem 1.2rem;max-width:420px;width:100%}
-h1{font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+h1{font-size:1.8rem;font-weight:700;color:var(--accent);margin-bottom:.5rem}
+h1 span{color:var(--gold)}
 .subtitle{font-size:.88rem;color:var(--text-soft);margin-bottom:2.5rem}
 .cards{display:flex;flex-direction:column;gap:1.2rem}
 .entry-card{
-  background:linear-gradient(145deg,#1a1432,#2d1f4e);border:1.5px solid rgba(245,197,66,.2);
+  background:var(--card-bg);border:1.5px solid rgba(146,176,106,.25);
   border-radius:20px;padding:2rem 1.5rem;cursor:pointer;text-decoration:none;color:var(--text);
-  transition:all .3s ease;box-shadow:0 4px 20px rgba(0,0,0,.3);display:block;
+  transition:all .3s ease;box-shadow:0 2px 15px rgba(90,114,71,.08);display:block;
 }
-.entry-card:hover,.entry-card:active{transform:translateY(-3px);box-shadow:0 8px 30px rgba(167,139,250,.2);border-color:var(--purple)}
+.entry-card:hover,.entry-card:active{transform:translateY(-3px);box-shadow:0 6px 25px rgba(90,114,71,.15);border-color:var(--accent-light)}
 .entry-card .icon{font-size:3rem;margin-bottom:.8rem}
-.entry-card .title{font-size:1.2rem;font-weight:700;color:var(--gold);margin-bottom:.4rem}
+.entry-card .title{font-size:1.2rem;font-weight:700;color:var(--accent);margin-bottom:.4rem}
 .entry-card .desc{font-size:.82rem;color:var(--text-soft);line-height:1.6}
-.footer{margin-top:3rem;font-size:.7rem;color:rgba(255,255,255,.2)}
+.footer{margin-top:3rem;font-size:.7rem;color:var(--bark);opacity:.4}
 </style>
 </head>
 <body>
-<div class="stars" id="stars"></div>
+<div class="leaves" id="leaves"></div>
 <div class="container">
   <h1 id="siteTitle"></h1>
   <div class="subtitle" id="siteSub"></div>
   <div class="cards">
     <a class="entry-card" href="daily.html">
-      <div class="icon">🌅</div>
+      <div class="icon">🌿</div>
       <div class="title" id="dailyTitle"></div>
       <div class="desc" id="dailyDesc"></div>
     </a>
     <a class="entry-card" href="question.html">
-      <div class="icon">🔮</div>
+      <div class="icon">🍃</div>
       <div class="title" id="questionTitle"></div>
       <div class="desc" id="questionDesc"></div>
     </a>
   </div>
   <div class="footer" id="footerText"></div>
 </div>
-<script>
 <script src="cards.js"></script>
 <script>
-createStars();
-document.getElementById('siteTitle').textContent = t(UI.site_name);
+// Falling leaves
+(function(){var e=document.getElementById('leaves');var emojis=['🍃','🌿','🍂','🌱','☘️'];for(var i=0;i<15;i++){var s=document.createElement('div');s.className='leaf';s.textContent=emojis[Math.floor(Math.random()*emojis.length)];s.style.cssText='left:'+Math.random()*100+'%;font-size:'+(0.8+Math.random()*1)+'rem;--d:'+(6+Math.random()*8)+'s;--delay:'+Math.random()*8+'s';e.appendChild(s)}})();
+document.getElementById('siteTitle').innerHTML = '🌿 '+t(UI.site_name).replace('✨ ','');
 document.getElementById('siteSub').textContent = t(UI.site_sub);
 document.getElementById('dailyTitle').textContent = t(UI.daily_title);
 document.getElementById('dailyDesc').innerHTML = t(UI.daily_desc);
 document.getElementById('questionTitle').textContent = t(UI.question_title);
 document.getElementById('questionDesc').innerHTML = t(UI.question_desc);
-document.getElementById('footerText').textContent = t(UI.footer_home);
+document.getElementById('footerText').textContent = t(UI.footer_home).replace('✨','🌿');
 </script>
 </body>
 </html>

@@ -3,201 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>心事求签 🔮</title>
-<meta name="description" content="写下你的心事，让塔罗牌为你指引方向">
+<title>心事求签 🍃</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0f0a1a;--card-bg:linear-gradient(145deg,#1a1432,#2d1f4e);--gold:#f5c542;--gold-soft:#fde68a;--purple:#a78bfa;--pink:#f472b6;--text:#e2e0ef;--text-soft:#a8a3c0}
+:root{--bg:#f5f0e8;--card-bg:#fffdf7;--accent:#5a7247;--accent-light:#8fa97a;--gold:#b8860b;--brown:#6b4f3a;--text:#3d3427;--text-soft:#7a6e5d;--leaf:#92b06a;--pink:#c77dba}
 body{font-family:'Noto Serif SC',serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;
-  background-image:radial-gradient(ellipse at 20% 50%,rgba(120,80,200,.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(200,120,255,.06) 0%,transparent 50%)}
-.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
-.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s)}
-@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.8;transform:scale(1.2)}}
+  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2392b06a' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.leaves{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.leaf{position:absolute;font-size:1.2rem;opacity:.25;animation:fall var(--d,8s) linear infinite var(--delay,0s)}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:0}10%{opacity:.25}90%{opacity:.25}100%{transform:translateY(calc(100vh + 20px)) rotate(360deg);opacity:0}}
 .container{position:relative;z-index:1;max-width:420px;width:100%;padding:2rem 1.2rem;text-align:center}
-.back-link{display:inline-block;color:var(--text-soft);font-size:.8rem;text-decoration:none;margin-bottom:1rem;padding:.3rem .8rem;border:1px solid rgba(255,255,255,.1);border-radius:15px}
-.back-link:hover{border-color:var(--purple);color:var(--purple)}
-h1{font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.3rem}
+.back-link{display:inline-block;color:var(--text-soft);font-size:.8rem;text-decoration:none;margin-bottom:1rem;padding:.3rem .8rem;border:1px solid rgba(90,114,71,.2);border-radius:15px;background:rgba(255,255,255,.5)}
+.back-link:hover{border-color:var(--accent);color:var(--accent)}
+h1{font-size:1.5rem;font-weight:700;color:var(--accent);margin-bottom:.3rem}
 .subtitle{font-size:.85rem;color:var(--text-soft);margin-bottom:1.5rem}
 .question-area{margin-bottom:1.5rem}
-.question-area input{width:100%;padding:.8rem 1rem;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:12px;color:var(--text);font-size:.95rem;font-family:inherit;outline:none;text-align:center}
-.question-area input:focus{border-color:var(--purple);box-shadow:0 0 15px rgba(167,139,250,.15)}
+.question-area input{width:100%;padding:.8rem 1rem;background:rgba(255,255,255,.7);border:1.5px solid rgba(146,176,106,.3);border-radius:12px;color:var(--text);font-size:.95rem;font-family:inherit;outline:none;text-align:center}
+.question-area input:focus{border-color:var(--accent);box-shadow:0 0 12px rgba(146,176,106,.15)}
 .question-area input::placeholder{color:var(--text-soft)}
 .question-hint{font-size:.72rem;color:var(--text-soft);margin-top:.5rem;opacity:.7}
 .card-container{perspective:800px;margin:0 auto 2rem;width:260px;height:400px;cursor:pointer}
 .card-inner{position:relative;width:100%;height:100%;transition:transform .8s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
 .card-inner.flipped{transform:rotateY(180deg)}
 .card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:16px;overflow:hidden}
-.card-front{background:var(--card-bg);border:2px solid rgba(167,139,250,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(167,139,250,.15),0 8px 32px rgba(0,0,0,.4)}
+.card-front{background:var(--card-bg);border:2px solid rgba(146,176,106,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(90,114,71,.1)}
 .card-front .symbol{font-size:4rem;margin-bottom:1rem;animation:float 3s ease-in-out infinite}
-.card-front .tap-hint{font-size:.8rem;color:var(--purple);animation:pulse 2s ease-in-out infinite}
+.card-front .tap-hint{font-size:.8rem;color:var(--accent-light);animation:pulse 2s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
-.card-back{transform:rotateY(180deg);background:var(--card-bg);border:2px solid rgba(167,139,250,.4);display:flex;flex-direction:column;align-items:center;padding:1.2rem 1rem;box-shadow:0 0 40px rgba(167,139,250,.15),0 8px 32px rgba(0,0,0,.4)}
-.card-back .question-echo{font-size:.76rem;color:var(--purple);margin-bottom:.3rem;padding:.25rem .7rem;background:rgba(167,139,250,.1);border-radius:8px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.card-back{transform:rotateY(180deg);background:var(--card-bg);border:2px solid rgba(146,176,106,.35);display:flex;flex-direction:column;align-items:center;padding:1.2rem 1rem;box-shadow:0 4px 25px rgba(90,114,71,.12)}
+.card-back .question-echo{font-size:.76rem;color:var(--accent);margin-bottom:.3rem;padding:.25rem .7rem;background:rgba(146,176,106,.1);border-radius:8px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card-back .topic-label{font-size:.7rem;color:var(--pink);margin-bottom:.5rem}
 .card-back .card-emoji{font-size:2.5rem;margin-bottom:.3rem}
-.card-back .card-name{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:.15rem}
+.card-back .card-name{font-size:1rem;font-weight:700;color:var(--accent);margin-bottom:.15rem}
 .card-back .card-name-en{font-size:.7rem;color:var(--text-soft);margin-bottom:.5rem}
 .card-back .card-keyword{display:flex;gap:.3rem;flex-wrap:wrap;justify-content:center;margin-bottom:.6rem}
-.card-back .kw{background:rgba(167,139,250,.15);color:var(--purple);padding:.15rem .5rem;border-radius:20px;font-size:.68rem}
+.card-back .kw{background:rgba(146,176,106,.15);color:var(--accent);padding:.15rem .5rem;border-radius:20px;font-size:.68rem}
 .card-back .card-msg{font-size:.85rem;line-height:1.7;color:var(--text);flex:1;display:flex;align-items:center;text-align:center}
 .card-back .card-wish{font-size:.75rem;color:var(--pink);margin-top:.4rem;font-style:italic}
 .result{display:none;margin-top:1rem}
 .result.show{display:block;animation:fadeUp .6s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.again-btn{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;border:none;padding:.7rem 2rem;border-radius:25px;font-size:.88rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 15px rgba(167,139,250,.3);margin-top:.5rem}
+.again-btn{background:var(--accent);color:#fff;border:none;padding:.7rem 2rem;border-radius:25px;font-size:.88rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 15px rgba(90,114,71,.2);margin-top:.5rem}
 .again-btn:active{transform:scale(.95)}
-.share-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:var(--text-soft);padding:.5rem 1.5rem;border-radius:20px;font-size:.82rem;cursor:pointer;margin-top:.8rem;font-family:inherit}
+.share-btn{background:rgba(255,255,255,.6);border:1px solid rgba(146,176,106,.3);color:var(--text-soft);padding:.5rem 1.5rem;border-radius:20px;font-size:.82rem;cursor:pointer;margin-top:.8rem;font-family:inherit}
 .share-btn:active{transform:scale(.95)}
-.footer{margin-top:2rem;font-size:.7rem;color:rgba(255,255,255,.2);padding-bottom:2rem}
+.footer{margin-top:2rem;font-size:.7rem;color:var(--bark);opacity:.3;padding-bottom:2rem}
 </style>
 </head>
 <body>
-<div class="stars" id="stars"></div>
+<div class="leaves" id="leaves"></div>
 <div class="container">
   <a class="back-link" href="index.html" id="backLink">← 返回</a>
-  <h1 id="pageTitle">🔮 心事求签</h1>
-  <div class="subtitle" id="pageSub">写下你的问题，让塔罗为你指引方向</div>
-
+  <h1 id="pageTitle">🍃 心事求签</h1>
+  <div class="subtitle" id="pageSub"></div>
   <div class="question-area">
-    <input type="text" id="questionInput" placeholder="写下你的心事或问题..." maxlength="50" autofocus>
-    <div class="question-hint" id="questionHint">比如：我该不该换工作？这段感情值得继续吗？考试能顺利吗？</div>
+    <input type="text" id="questionInput" placeholder="" maxlength="50" autofocus>
+    <div class="question-hint" id="questionHint"></div>
   </div>
-
-  <div class="card-container" id="cardContainer" onclick="flipCard()">
+  <div class="card-container" onclick="flipCard()">
     <div class="card-inner" id="cardInner">
       <div class="card-front">
-        <div class="symbol">🔮</div>
-        <div class="tap-hint" id="tapHint">✨ 心中默念问题，然后翻牌 ✨</div>
+        <div class="symbol">🍃</div>
+        <div class="tap-hint" id="tapHint"></div>
       </div>
       <div class="card-back" id="cardBack"></div>
     </div>
   </div>
-
   <div class="result" id="result">
-    <button class="again-btn" onclick="askAgain()" id="againBtn">🔮 再问一个问题</button>
-    <br>
-    <button class="share-btn" onclick="shareCard()" id="shareBtn">📸 保存分享</button>
+    <button class="again-btn" onclick="askAgain()" id="againBtn"></button><br>
+    <button class="share-btn" onclick="shareCard()" id="shareBtn"></button>
   </div>
-
-  <div class="footer">🔮 心事求签 · 每张牌都是正能量指引</div>
+  <div class="footer" id="footerText"></div>
 </div>
 <script src="qr.min.js"></script>
 <script src="cards.js"></script>
 <script>
-var seed = getDaySeed();
-var flipped = false;
-var currentCard = null;
-var currentQuestion = '';
-var currentTopic = '';
-var now = new Date();
-var weekdays = ['日','一','二','三','四','五','六'];
+(function(){var e=document.getElementById('leaves');var em=['🍃','🌿','🍂','🌱','☘️'];for(var i=0;i<12;i++){var s=document.createElement('div');s.className='leaf';s.textContent=em[Math.floor(Math.random()*em.length)];s.style.cssText='left:'+Math.random()*100+'%;font-size:'+(0.8+Math.random()*1)+'rem;--d:'+(6+Math.random()*8)+'s;--delay:'+Math.random()*8+'s';e.appendChild(s)}})();
 
-createStars();
-document.getElementById('backLink').textContent = t(UI.back);
-document.getElementById('pageTitle').textContent = t(UI.question_h1);
-document.getElementById('pageSub').textContent = t(UI.question_sub);
-document.getElementById('questionInput').placeholder = t(UI.question_ph);
-document.getElementById('questionHint').textContent = t(UI.question_hint);
-document.getElementById('tapHint').textContent = t(UI.question_tap);
-document.getElementById('againBtn').textContent = t(UI.ask_again);
-document.getElementById('shareBtn').textContent = t(UI.share_btn);
-document.querySelector('.footer').textContent = t(UI.footer_question);
+var seed=getDaySeed(),flipped=false,currentCard=null,currentQuestion='',currentTopic='',now=new Date();
+document.getElementById('backLink').textContent=t(UI.back);
+document.getElementById('pageTitle').textContent='🍃 '+t(UI.question_title);
+document.getElementById('pageSub').textContent=t(UI.question_sub);
+document.getElementById('questionInput').placeholder=t(UI.question_ph);
+document.getElementById('questionHint').textContent=t(UI.question_hint);
+document.getElementById('tapHint').textContent=t(UI.question_tap);
+document.getElementById('againBtn').textContent=t(UI.ask_again);
+document.getElementById('shareBtn').textContent=t(UI.share_btn);
+document.getElementById('footerText').textContent=t(UI.footer_question).replace('🔮','🍃');
 
 function flipCard(){
-  if(flipped){
-    askAgain();
-    return;
-  }
-  var q = document.getElementById('questionInput').value.trim();
-  if(!q){
-    var inp = document.getElementById('questionInput');
-    inp.style.borderColor = '#f472b6';
-    inp.placeholder = t(UI.question_empty);
-    inp.focus();
-    setTimeout(function(){inp.style.borderColor='';inp.placeholder=t(UI.question_ph)},2000);
-    return;
-  }
-  currentQuestion = q;
-  currentTopic = detectTopic(q);
-
-  // Pick card based on question + day
-  var hash = 0;
-  for(var i=0;i<q.length;i++) hash = ((hash<<5)-hash) + q.charCodeAt(i) + seed;
-  hash = Math.abs(hash);
-  currentCard = CARDS[hash % CARDS.length];
-
-  // Get topic-specific reading
-  var msg = t(currentCard.msg);
-  var qr = Q_READINGS[currentCard.name.zh];
-  if(qr && qr[currentTopic]) msg = t(qr[currentTopic]);
-
-  flipped = true;
-  document.getElementById('cardBack').innerHTML =
-    '<div class="question-echo">💭 "'+currentQuestion+'"</div>'+
-    '<div class="topic-label">'+t(TOPIC_LABELS[currentTopic])+'</div>'+
-    '<div class="card-emoji">'+currentCard.emoji+'</div>'+
-    '<div class="card-name">'+t(currentCard.name)+'</div>'+
-    '<div class="card-name-en">'+(LANG==='zh'?currentCard.name.en:currentCard.name.zh)+'</div>'+
-    '<div class="card-keyword">'+t(currentCard.keywords).map(function(k){return '<span class="kw">'+k+'</span>'}).join('')+'</div>'+
-    '<div class="card-msg">'+msg+'</div>'+
-    '<div class="card-wish">'+t(currentCard.wish)+' 💫</div>';
+  if(flipped){askAgain();return}
+  var q=document.getElementById('questionInput').value.trim();
+  if(!q){var inp=document.getElementById('questionInput');inp.style.borderColor='#c77dba';inp.placeholder=t(UI.question_empty);inp.focus();setTimeout(function(){inp.style.borderColor='';inp.placeholder=t(UI.question_ph)},2000);return}
+  currentQuestion=q;currentTopic=detectTopic(q);
+  var hash=0;for(var i=0;i<q.length;i++)hash=((hash<<5)-hash)+q.charCodeAt(i)+seed;hash=Math.abs(hash);
+  currentCard=CARDS[hash%CARDS.length];
+  var msg=t(currentCard.msg);var qr=Q_READINGS[currentCard.name.zh];if(qr&&qr[currentTopic])msg=t(qr[currentTopic]);
+  flipped=true;
+  document.getElementById('cardBack').innerHTML='<div class="question-echo">🍃 "'+currentQuestion+'"</div><div class="topic-label">'+t(TOPIC_LABELS[currentTopic])+'</div><div class="card-emoji">'+currentCard.emoji+'</div><div class="card-name">'+t(currentCard.name)+'</div><div class="card-name-en">'+(LANG==='zh'?currentCard.name.en:currentCard.name.zh)+'</div><div class="card-keyword">'+t(currentCard.keywords).map(function(k){return'<span class="kw">'+k+'</span>'}).join('')+'</div><div class="card-msg">'+msg+'</div><div class="card-wish">'+t(currentCard.wish)+' 🌿</div>';
   document.getElementById('cardInner').classList.add('flipped');
-
-  setTimeout(function(){
-    document.getElementById('result').classList.add('show');
-  }, 900);
+  setTimeout(function(){document.getElementById('result').classList.add('show')},900);
 }
-
-function askAgain(){
-  flipped = false;
-  currentCard = null;
-  currentQuestion = '';
-  document.getElementById('cardInner').classList.remove('flipped');
-  document.getElementById('result').classList.remove('show');
-  document.getElementById('questionInput').value = '';
-  document.getElementById('questionInput').focus();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+function askAgain(){flipped=false;currentCard=null;currentQuestion='';document.getElementById('cardInner').classList.remove('flipped');document.getElementById('result').classList.remove('show');document.getElementById('questionInput').value='';document.getElementById('questionInput').focus();window.scrollTo({top:0,behavior:'smooth'})}
 
 function shareCard(){
-  if(!currentCard) return;
-  var btn=document.querySelector('.share-btn');btn.textContent='⏳ 生成中...';btn.disabled=true;
-  try{_doShareQ(btn)}catch(e){alert('生成失败：'+e.message);btn.textContent='📸 保存分享';btn.disabled=false}
-}
-
-function _doShareQ(btn){
-  var W=750,H=1100,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
-  var grad=ctx.createLinearGradient(0,0,W,H);grad.addColorStop(0,'#0f0a1a');grad.addColorStop(0.5,'#1a1432');grad.addColorStop(1,'#0f0a1a');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-  for(var i=0;i<80;i++){ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,Math.random()*1.5+.5,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+(Math.random()*.5+.1)+')';ctx.fill()}
-  function ft(t,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(t,x,y,W-80)}
-  function wt(t,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=t.split(''),line='',cy=y;for(var i=0;i<ch.length;i++){var test=line+ch[i];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[i];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
-
-  ft(t(UI.question_h1),W/2,60,'bold 32px sans-serif','#a78bfa');
-  ft('💭 "'+currentQuestion+'"',W/2,110,'20px sans-serif','#e2e0ef');
-  ft(t(TOPIC_LABELS[currentTopic]),W/2,145,'16px sans-serif','#f472b6');
-
-  // Card
-  ctx.strokeStyle='rgba(167,139,250,0.4)';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(120,175,510,500,20);ctx.stroke();
-  var cg=ctx.createLinearGradient(120,175,630,675);cg.addColorStop(0,'rgba(26,20,50,0.9)');cg.addColorStop(1,'rgba(45,31,78,0.9)');ctx.fillStyle=cg;ctx.beginPath();ctx.roundRect(120,175,510,500,20);ctx.fill();
-
-  ft(currentCard.emoji,W/2,250,'55px sans-serif','#fff');
-  ft(t(currentCard.name),W/2,305,'bold 30px sans-serif','#f5c542');
-  ft(LANG==='zh'?currentCard.name.en:currentCard.name.zh,W/2,332,'16px sans-serif','#a8a3c0');
-  ft(t(currentCard.keywords).join('  ·  '),W/2,365,'16px sans-serif','#a78bfa');
-
-  var msg=t(currentCard.msg);var qr=Q_READINGS[currentCard.name.zh];if(qr&&qr[currentTopic])msg=t(qr[currentTopic]);
-  var ey=wt(msg,W/2,410,'22px sans-serif','#e2e0ef',440,34);
-  ft(t(currentCard.wish)+' 💫',W/2,ey+40,'italic 18px sans-serif','#f472b6');
-
-  // QR
-  var qrc=generateQRCanvas('https://tarot.1yong.com',100),qy=740;
-  ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(W/2-55,qy-5,110,110,8);ctx.fill();ctx.drawImage(qrc,W/2-50,qy,100,100);
-  ft(t(UI.qr_hint_q),W/2,qy+128,'15px sans-serif','rgba(255,255,255,0.4)');
-
-  c.toBlob(function(blob){var f=new File([blob],'tarot-question.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'心事求签 🔮'}).catch(function(){})}else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tarot-question.png';a.click();URL.revokeObjectURL(a.href)}btn.textContent='📸 保存分享';btn.disabled=false},'image/png');
+  if(!currentCard)return;var btn=document.querySelector('.share-btn');btn.textContent=t(UI.generating);btn.disabled=true;
+  try{
+    var W=750,H=1100,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
+    ctx.fillStyle='#f5f0e8';ctx.fillRect(0,0,W,H);
+    ctx.globalAlpha=0.04;ctx.font='30px serif';for(var i=0;i<20;i++)ctx.fillText(['🍃','🌿','☘️'][i%3],Math.random()*W,Math.random()*H);ctx.globalAlpha=1;
+    function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,W-80)}
+    function wt(tx,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=tx.split(''),line='',cy=y;for(var j=0;j<ch.length;j++){var test=line+ch[j];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[j];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
+    ft('🍃 '+t(UI.question_title),W/2,60,'bold 32px sans-serif','#5a7247');
+    ft('💭 "'+currentQuestion+'"',W/2,110,'20px sans-serif','#3d3427');
+    ft(t(TOPIC_LABELS[currentTopic]),W/2,145,'16px sans-serif','#c77dba');
+    ctx.strokeStyle='rgba(146,176,106,0.35)';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(120,175,510,500,20);ctx.stroke();
+    ctx.fillStyle='#fffdf7';ctx.beginPath();ctx.roundRect(120,175,510,500,20);ctx.fill();
+    ft(currentCard.emoji,W/2,250,'55px sans-serif','#000');ft(t(currentCard.name),W/2,305,'bold 30px sans-serif','#5a7247');ft(LANG==='zh'?currentCard.name.en:currentCard.name.zh,W/2,332,'16px sans-serif','#7a6e5d');
+    ft(t(currentCard.keywords).join('  ·  '),W/2,365,'16px sans-serif','#8fa97a');
+    var msg=t(currentCard.msg);var qr=Q_READINGS[currentCard.name.zh];if(qr&&qr[currentTopic])msg=t(qr[currentTopic]);
+    var ey=wt(msg,W/2,410,'22px sans-serif','#3d3427',440,34);ft(t(currentCard.wish)+' 🌿',W/2,ey+40,'italic 18px sans-serif','#c77dba');
+    var qrc=generateQRCanvas('https://tarot.1yong.com',100),qy=740;ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(W/2-55,qy-5,110,110,8);ctx.fill();ctx.drawImage(qrc,W/2-50,qy,100,100);ft(t(UI.qr_hint_q),W/2,qy+128,'15px sans-serif','rgba(61,52,39,0.3)');
+    c.toBlob(function(blob){var f=new File([blob],'tarot-question.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:t(UI.question_title)}).catch(function(){})}else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tarot-question.png';a.click();URL.revokeObjectURL(a.href)}btn.textContent=t(UI.share_btn);btn.disabled=false},'image/png');
+  }catch(e){alert(t(UI.share_fail)+e.message);btn.textContent=t(UI.share_btn);btn.disabled=false}
 }
 </script>
 </body>

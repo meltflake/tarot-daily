@@ -349,17 +349,180 @@ function resetCard(){
   document.getElementById('luckFill').style.width = '0';
 }
 
-function shareCard(){
-  const text = `✨ 我今天抽到了【${todayCard.name}】\n${todayCard.emoji} ${todayCard.msg}\n💫 ${todayCard.wish}\n🎨 幸运色：${todayColor.name}\n🔢 幸运数字：${todayNum}\n\n来抽你的每日一签 👉`;
-  if(navigator.share){
-    navigator.share({title:'每日一签 ✨',text:text}).catch(()=>{});
-  } else {
-    navigator.clipboard.writeText(text).then(()=>{
-      const btn = document.querySelector('.share-btn');
-      btn.textContent = '✅ 已复制到剪贴板';
-      setTimeout(()=>{ btn.textContent = '📸 保存分享'; }, 2000);
-    });
+// ===== QR Code Generator (minimal) =====
+// Based on Project Nayuki's QR Code generator (MIT license, minified)
+function generateQR(text,size){
+  // Use the QR API as image
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  return new Promise((resolve)=>{
+    img.onload = ()=>resolve(img);
+    img.onerror = ()=>resolve(null);
+    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&margin=1`;
+  });
+}
+
+async function shareCard(){
+  const btn = document.querySelector('.share-btn');
+  btn.textContent = '⏳ 生成中...';
+  btn.disabled = true;
+
+  const W = 750, H = 1334; // iPhone screenshot ratio
+  const c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const ctx = c.getContext('2d');
+
+  // Background gradient
+  const grad = ctx.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0,'#0f0a1a');
+  grad.addColorStop(0.5,'#1a1432');
+  grad.addColorStop(1,'#0f0a1a');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,W,H);
+
+  // Stars
+  for(let i=0;i<80;i++){
+    ctx.beginPath();
+    ctx.arc(Math.random()*W, Math.random()*H, Math.random()*1.5+0.5, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.5+0.1})`;
+    ctx.fill();
   }
+
+  // Helper functions
+  function fillText(text, x, y, font, color, align='center', maxW=W-80){
+    ctx.font = font;
+    ctx.fillStyle = color;
+    ctx.textAlign = align;
+    ctx.fillText(text, x, y, maxW);
+  }
+  function wrapText(text, x, y, font, color, maxW, lineH){
+    ctx.font = font;
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    const chars = text.split('');
+    let line = '';
+    let curY = y;
+    for(const ch of chars){
+      const test = line + ch;
+      if(ctx.measureText(test).width > maxW && line){
+        ctx.fillText(line, x, curY);
+        line = ch;
+        curY += lineH;
+      } else {
+        line = test;
+      }
+    }
+    if(line) ctx.fillText(line, x, curY);
+    return curY;
+  }
+
+  // Title
+  fillText('✨ 每日一签 ✨', W/2, 70, 'bold 36px sans-serif', '#f5c542');
+
+  // Date
+  const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 星期${weekdays[now.getDay()]}`;
+  fillText(dateStr, W/2, 115, '20px sans-serif', '#a78bfa');
+
+  // Card area (rounded rect)
+  const cardX=120, cardY=150, cardW=510, cardH=520, cardR=20;
+  ctx.strokeStyle = 'rgba(245,197,66,0.4)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(cardX, cardY, cardW, cardH, cardR);
+  ctx.stroke();
+  // Card fill
+  const cardGrad = ctx.createLinearGradient(cardX,cardY,cardX+cardW,cardY+cardH);
+  cardGrad.addColorStop(0,'rgba(26,20,50,0.9)');
+  cardGrad.addColorStop(1,'rgba(45,31,78,0.9)');
+  ctx.fillStyle = cardGrad;
+  ctx.beginPath();
+  ctx.roundRect(cardX, cardY, cardW, cardH, cardR);
+  ctx.fill();
+
+  // Card emoji
+  fillText(todayCard.emoji, W/2, 230, '60px sans-serif', '#fff');
+  // Card name
+  fillText(todayCard.name, W/2, 290, 'bold 32px sans-serif', '#f5c542');
+  fillText(todayCard.en, W/2, 320, '18px sans-serif', '#a8a3c0');
+
+  // Keywords
+  const kwStr = todayCard.keywords.join('  ·  ');
+  fillText(kwStr, W/2, 358, '18px sans-serif', '#a78bfa');
+
+  // Message
+  const msgEndY = wrapText(todayCard.msg, W/2, 405, '22px sans-serif', '#e2e0ef', 440, 34);
+
+  // Wish
+  fillText(todayCard.wish + ' 💫', W/2, msgEndY + 45, 'italic 20px sans-serif', '#f472b6');
+
+  // Energy bars
+  let barY = 710;
+  const barLabels = [
+    {label:'💕 爱情能量', val:love, color:['#f472b6','#fb7185']},
+    {label:'💼 事业能量', val:work, color:['#a78bfa','#818cf8']},
+    {label:'🍀 幸运能量', val:luck, color:['#fbbf24','#f59e0b']},
+  ];
+  barLabels.forEach(b=>{
+    fillText(b.label, 90, barY, '18px sans-serif', '#a8a3c0', 'left');
+    fillText(b.val+'%', W-90, barY, '18px sans-serif', '#e2e0ef', 'right');
+    // Track
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.beginPath(); ctx.roundRect(90, barY+10, W-180, 10, 5); ctx.fill();
+    // Fill
+    const bGrad = ctx.createLinearGradient(90,0,90+(W-180)*b.val/100,0);
+    bGrad.addColorStop(0,b.color[0]); bGrad.addColorStop(1,b.color[1]);
+    ctx.fillStyle = bGrad;
+    ctx.beginPath(); ctx.roundRect(90, barY+10, (W-180)*b.val/100, 10, 5); ctx.fill();
+    barY += 55;
+  });
+
+  // Affirmation box
+  const affY = barY + 15;
+  ctx.fillStyle = 'rgba(245,197,66,0.06)';
+  ctx.strokeStyle = 'rgba(245,197,66,0.2)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(70, affY, W-140, 70, 12); ctx.fill(); ctx.stroke();
+  fillText('" ' + todayAffirm, W/2, affY+42, '22px sans-serif', '#fde68a');
+
+  // Lucky items
+  const luckyY = affY + 100;
+  fillText(todayColor.icon + ' 幸运色', W/2-200, luckyY, '16px sans-serif', '#a8a3c0');
+  fillText(todayColor.name, W/2-200, luckyY+28, 'bold 20px sans-serif', '#e2e0ef');
+  fillText('🔢 幸运数字', W/2, luckyY, '16px sans-serif', '#a8a3c0');
+  fillText(String(todayNum), W/2, luckyY+28, 'bold 20px sans-serif', '#e2e0ef');
+  fillText(todayThing.icon + ' 幸运物', W/2+200, luckyY, '16px sans-serif', '#a8a3c0');
+  fillText(todayThing.name, W/2+200, luckyY+28, 'bold 20px sans-serif', '#e2e0ef');
+
+  // QR Code
+  const siteUrl = 'https://tarot.1yong.com';
+  const qrImg = await generateQR(siteUrl, 120);
+  const qrY = luckyY + 80;
+  if(qrImg){
+    // White background for QR
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.roundRect(W/2-65, qrY-5, 130, 130, 8); ctx.fill();
+    ctx.drawImage(qrImg, W/2-60, qrY, 120, 120);
+  }
+  fillText('长按识别二维码 · 抽你的每日一签', W/2, qrY+148, '16px sans-serif', 'rgba(255,255,255,0.4)');
+
+  // Convert to blob and share/download
+  c.toBlob(async (blob)=>{
+    const file = new File([blob], 'daily-tarot.png', {type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({files:[file], title:'每日一签 ✨'});
+      }catch(e){}
+    } else {
+      // Fallback: download
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'daily-tarot.png';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    btn.textContent = '📸 保存分享';
+    btn.disabled = false;
+  }, 'image/png');
 }
 </script>
 </body>

@@ -154,7 +154,7 @@ h1{font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,var(--gold
 
     <button class="share-btn" onclick="shareCard()">📸 保存分享</button>
     <br>
-    <button class="reset-btn" id="resetBtn" onclick="resetCard()">🔄 再抽一次（明天更准哦）</button>
+    <button class="reset-btn" id="resetBtn" onclick="resetCard()">🔄 换个问题再抽一签</button>
   </div>
 
   <div class="footer">✨ 每日一签 · 用正能量开启每一天</div>
@@ -359,7 +359,15 @@ var currentCard = todayCard;
 var currentQuestion = '';
 
 function flipCard(){
-  if(flipped) return;
+  if(flipped){
+    // Already flipped — if question changed, reset and re-flip
+    const q = document.getElementById('questionInput').value.trim();
+    if(q && q !== currentQuestion){
+      resetCard();
+      setTimeout(flipCard, 100);
+    }
+    return;
+  }
 
   const q = document.getElementById('questionInput').value.trim();
   if(q){

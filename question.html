@@ -109,39 +109,32 @@ function askAgain(){flipped=false;currentCard=null;currentQuestion='';document.g
 function shareCard(){
   if(!currentCard)return;var btn=document.querySelector('.share-btn');btn.textContent=t(UI.generating);btn.disabled=true;
   try{
-    var S=2,W=660*S,H=920*S,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
-    ctx.scale(S,S);var w=660,h=920;
-    // Background
-    var g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#16103a');g.addColorStop(0.5,'#0f0a1a');g.addColorStop(1,'#0a0615');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-    for(var i=0;i<40;i++){ctx.fillStyle='rgba(255,255,255,'+(0.15+Math.random()*0.4)+')';var sz=Math.random()*1.8+0.3;ctx.beginPath();ctx.arc(Math.random()*w,Math.random()*h,sz,0,Math.PI*2);ctx.fill()}
+    var S=2,w=660,h=1000,W=w*S,H=h*S,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
+    ctx.scale(S,S);
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
     function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,w-100)}
     function wt(tx,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=tx.split(''),line='',cy=y;for(var j=0;j<ch.length;j++){var test=line+ch[j];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[j];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
-    // Question echo
-    var qText=currentQuestion.length>18?currentQuestion.slice(0,18)+'…':currentQuestion;
-    ft('💭 "'+qText+'"',w/2,48,'16px sans-serif','rgba(226,224,239,0.5)');
-    // Topic label
-    ft(t(TOPIC_LABELS[currentTopic]),w/2,78,'14px sans-serif','rgba(244,114,182,0.55)');
-    // Divider
-    ctx.strokeStyle='rgba(167,139,250,0.12)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(w/2-60,95);ctx.lineTo(w/2+60,95);ctx.stroke();
-    // Emoji
-    ft(currentCard.emoji,w/2,175,'68px sans-serif','#fff');
-    // Name
-    ft(t(currentCard.name),w/2,235,'bold 32px sans-serif','#e8dff5');
-    ft(LANG==='zh'?currentCard.name.en:currentCard.name.zh,w/2,264,'15px sans-serif','rgba(168,163,192,0.6)');
+    // Question + topic
+    var qText=currentQuestion.length>20?currentQuestion.slice(0,20)+'…':currentQuestion;
+    ft('💭 '+qText,w/2,240,'14px sans-serif','#b0b0b0');
+    ft(t(TOPIC_LABELS[currentTopic]),w/2,268,'13px sans-serif','#c8c8c8');
+    // Card name
+    ft(t(currentCard.name),w/2,330,'bold 36px sans-serif','#000');
+    ft(LANG==='zh'?currentCard.name.en:currentCard.name.zh,w/2,368,'14px sans-serif','#a0a0a0');
     // Keywords
-    ft(t(currentCard.keywords).join('  ·  '),w/2,305,'15px sans-serif','rgba(167,139,250,0.55)');
+    ft(t(currentCard.keywords).join('  ·  '),w/2,412,'13px sans-serif','#b4b4b4');
     // Divider
-    ctx.strokeStyle='rgba(167,139,250,0.1)';ctx.beginPath();ctx.moveTo(100,328);ctx.lineTo(w-100,328);ctx.stroke();
+    ctx.strokeStyle='#e6e6e6';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(200,440);ctx.lineTo(w-200,440);ctx.stroke();
     // Reading
     var msg=t(currentCard.msg);var qr=Q_READINGS[currentCard.name.zh];if(qr&&qr[currentTopic])msg=t(qr[currentTopic]);
-    var ey=wt(msg,w/2,375,'20px sans-serif','rgba(226,224,239,0.85)',480,32);
+    var ey=wt(msg,w/2,490,'19px sans-serif','#3c3c3c',440,36);
     // Wish
-    ft('"'+t(currentCard.wish)+'"',w/2,ey+50,'italic 17px sans-serif','rgba(244,114,182,0.7)');
+    ft(t(currentCard.wish),w/2,ey+48,'17px sans-serif','#a0a0a0');
     // QR
-    var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',144);
-    var qy=h-120;
-    ctx.globalAlpha=0.9;ctx.drawImage(qrc,w/2-36,qy,72,72);ctx.globalAlpha=1;
-    ft(t(UI.qr_hint_q),w/2,qy+95,'12px sans-serif','rgba(255,255,255,0.2)');
+    var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',96);
+    var qy=h-105;ctx.globalAlpha=0.92;ctx.drawImage(qrc,w/2-24,qy,48,48);ctx.globalAlpha=1;
+    var dateStr=LANG==='en'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate()+', '+now.getFullYear():now.getFullYear()+'.'+(now.getMonth()+1)+'.'+now.getDate();
+    ft(dateStr,w/2,h-40,'11px sans-serif','#d7d7d7');
     c.toBlob(function(blob){var f=new File([blob],'tarot-question.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:t(UI.question_title)}).catch(function(){})}else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tarot-question.png';a.click();URL.revokeObjectURL(a.href)}btn.textContent=t(UI.share_btn);btn.disabled=false},'image/png');
   }catch(e){alert(t(UI.share_fail)+e.message);btn.textContent=t(UI.share_btn);btn.disabled=false}
 }

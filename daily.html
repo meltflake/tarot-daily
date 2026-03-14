@@ -42,7 +42,7 @@ h1{font-size:1.5rem;font-weight:700;color:#2a2045;margin-bottom:.3rem}
 .energy-fill.love{background:linear-gradient(90deg,#d4a0c0,#e8b8d4)}
 .energy-fill.work{background:linear-gradient(90deg,#8898c8,#a0b0e0)}
 .energy-fill.luck{background:linear-gradient(90deg,#88c4a0,#a8dcc0)}
-.affirmation{background:rgba(140,120,180,.04);border:1px solid rgba(140,120,180,.1);border-radius:12px;padding:1rem;margin:1.2rem 0;font-size:.85rem;line-height:1.7;color:#5a4a78}
+.affirmation{background:rgba(140,120,180,.04);border:1px solid rgba(140,120,180,.1);border-radius:12px;padding:1rem;margin:1.2rem 0;font-size:.85rem;line-height:1.7;color:#5a4a78;text-align:center}
 .affirmation::before{content:'"';font-size:1.5rem;color:#a098b8;display:block;margin-bottom:.2rem}
 .lucky-items{display:flex;justify-content:center;gap:1.5rem;margin:1rem 0}
 .lucky-item{text-align:center}
@@ -138,8 +138,7 @@ function shareCard(){
     var dateStr=LANG==='en'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate()+', '+now.getFullYear():now.getFullYear()+'.'+(now.getMonth()+1)+'.'+now.getDate();
     // --- compact layout ---
     var cy=90;
-    ft(dateStr,w/2,cy,'12px sans-serif','rgba(195,190,215,1)');cy+=22;
-    ft('· · ·',w/2,cy,'14px sans-serif','rgba(210,205,225,1)');cy+=55;
+    ft(dateStr,w/2,cy,'12px sans-serif','rgba(195,190,215,1)');cy+=65;
     ft(todayCard.emoji,w/2,cy,'48px sans-serif','#000');cy+=70;
     ft(t(todayCard.name),w/2,cy,'bold 32px sans-serif','#2a2a48');cy+=32;
     ft(LANG==='zh'?todayCard.name.en:todayCard.name.zh,w/2,cy,'13px sans-serif','rgba(175,168,198,1)');cy+=30;

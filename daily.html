@@ -3,98 +3,271 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>每日一签 🌿</title>
+<title>每日一签 ✨</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f5f0e8;--card-bg:#fffdf7;--accent:#5a7247;--accent-light:#8fa97a;--gold:#b8860b;--brown:#6b4f3a;--text:#3d3427;--text-soft:#7a6e5d;--leaf:#92b06a;--bark:#a0845c;--pink:#c77dba;--blue:#6a8caf}
-body{font-family:'Noto Serif SC',serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;
-  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2392b06a' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
-.leaves{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
-.leaf{position:absolute;font-size:1.2rem;opacity:.25;animation:fall var(--d,8s) linear infinite var(--delay,0s)}
-@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:0}10%{opacity:.25}90%{opacity:.25}100%{transform:translateY(calc(100vh + 20px)) rotate(360deg);opacity:0}}
+body{font-family:'Noto Serif SC',serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;transition:background 1.8s ease,color 1.8s ease}
+/* ===== DEFAULT: DARK STARRY NIGHT ===== */
+body{background:#0f0a1a;color:#e2e0ef}
+#bgLayer{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;transition:opacity 1.5s ease}
 .container{position:relative;z-index:1;max-width:420px;width:100%;padding:2rem 1.2rem;text-align:center}
-.back-link{display:inline-block;color:var(--text-soft);font-size:.8rem;text-decoration:none;margin-bottom:1rem;padding:.3rem .8rem;border:1px solid rgba(90,114,71,.2);border-radius:15px;background:rgba(255,255,255,.5)}
-.back-link:hover{border-color:var(--accent);color:var(--accent)}
-h1{font-size:1.5rem;font-weight:700;color:var(--accent);margin-bottom:.3rem}
-.subtitle{font-size:.85rem;color:var(--text-soft);margin-bottom:1.5rem}
-.date{font-size:.78rem;color:var(--accent-light);margin-bottom:1.5rem;letter-spacing:2px}
+.back-link{display:inline-block;color:rgba(255,255,255,.5);font-size:.8rem;text-decoration:none;margin-bottom:1rem;padding:.3rem .8rem;border:1px solid rgba(255,255,255,.15);border-radius:15px;transition:all 1.5s ease}
+h1{font-size:1.5rem;font-weight:700;margin-bottom:.3rem;transition:color 1.5s ease}
+.subtitle{font-size:.85rem;opacity:.7;margin-bottom:1.5rem;transition:color 1.5s ease}
+.date{font-size:.78rem;opacity:.6;margin-bottom:1.5rem;letter-spacing:2px;transition:color 1.5s ease}
+/* Card */
 .card-container{perspective:800px;margin:0 auto 2rem;width:260px;height:400px;cursor:pointer}
 .card-inner{position:relative;width:100%;height:100%;transition:transform .8s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
 .card-inner.flipped{transform:rotateY(180deg)}
-.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:16px;overflow:hidden}
-.card-front{background:var(--card-bg);border:2px solid rgba(146,176,106,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(90,114,71,.1)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:16px;overflow:hidden;transition:background 1.5s ease,border-color 1.5s ease,box-shadow 1.5s ease}
+.card-front{background:rgba(255,255,255,.04);border:2px solid rgba(167,139,250,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(167,139,250,.1)}
 .card-front .symbol{font-size:4rem;margin-bottom:1rem;animation:float 3s ease-in-out infinite}
-.card-front .tap-hint{font-size:.8rem;color:var(--accent-light);animation:pulse 2s ease-in-out infinite}
+.card-front .tap-hint{font-size:.8rem;color:rgba(167,139,250,.6);animation:pulse 2s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
-.card-back{transform:rotateY(180deg);background:var(--card-bg);border:2px solid rgba(146,176,106,.35);display:flex;flex-direction:column;align-items:center;padding:1.5rem 1.2rem;box-shadow:0 4px 25px rgba(90,114,71,.12)}
+.card-back{transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;padding:1.5rem 1.2rem;transition:all 1.5s ease}
+/* Default card back for dark theme */
+.card-back{background:linear-gradient(145deg,#1a1230,#0f0a1a);border:2px solid rgba(167,139,250,.3);box-shadow:0 0 40px rgba(167,139,250,.15)}
 .card-back .card-emoji{font-size:3rem;margin-bottom:.5rem}
-.card-back .card-name{font-size:1.1rem;font-weight:700;color:var(--accent);margin-bottom:.2rem}
-.card-back .card-name-en{font-size:.75rem;color:var(--text-soft);margin-bottom:.8rem}
+.card-back .card-name{font-size:1.1rem;font-weight:700;margin-bottom:.2rem;transition:color 1.5s ease}
+.card-back .card-name-en{font-size:.75rem;opacity:.6;margin-bottom:.8rem}
 .card-back .card-keyword{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin-bottom:.8rem}
-.card-back .kw{background:rgba(146,176,106,.15);color:var(--accent);padding:.2rem .6rem;border-radius:20px;font-size:.72rem}
-.card-back .card-msg{font-size:.88rem;line-height:1.7;color:var(--text);flex:1;display:flex;align-items:center;text-align:center}
-.card-back .card-wish{font-size:.78rem;color:var(--pink);margin-top:.6rem;font-style:italic}
+.card-back .kw{padding:.2rem .6rem;border-radius:20px;font-size:.72rem;transition:all 1.5s ease}
+/* Default kw for dark */
+.card-back .kw{background:rgba(167,139,250,.15);color:#a78bfa}
+.card-back .card-msg{font-size:.88rem;line-height:1.7;flex:1;display:flex;align-items:center;text-align:center;transition:color 1.5s ease}
+.card-back .card-wish{font-size:.78rem;margin-top:.6rem;font-style:italic;transition:color 1.5s ease}
+/* Result area */
 .result{display:none;margin-top:1rem}
 .result.show{display:block;animation:fadeUp .6s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .energy-bar{margin:1.2rem 0;text-align:left}
-.energy-label{font-size:.78rem;color:var(--text-soft);margin-bottom:.4rem;display:flex;justify-content:space-between}
-.energy-track{height:6px;background:rgba(146,176,106,.1);border-radius:3px;overflow:hidden}
+.energy-label{font-size:.78rem;opacity:.7;margin-bottom:.4rem;display:flex;justify-content:space-between;transition:color 1.5s ease}
+.energy-track{height:6px;border-radius:3px;overflow:hidden;transition:background 1.5s ease}
+.energy-track{background:rgba(255,255,255,.08)}
 .energy-fill{height:100%;border-radius:3px;transition:width 1.5s ease;width:0}
-.energy-fill.love{background:linear-gradient(90deg,#c77dba,#e0a4d4)}
-.energy-fill.work{background:linear-gradient(90deg,#6a8caf,#92b5d4)}
-.energy-fill.luck{background:linear-gradient(90deg,#92b06a,#b8d48a)}
-.affirmation{background:rgba(146,176,106,.06);border:1px solid rgba(146,176,106,.2);border-radius:12px;padding:1rem;margin:1.2rem 0;font-size:.85rem;line-height:1.7;color:var(--brown)}
-.affirmation::before{content:'"';font-size:1.5rem;color:var(--accent);display:block;margin-bottom:.2rem}
+.energy-fill.love{background:linear-gradient(90deg,#f472b6,#fb7185)}
+.energy-fill.work{background:linear-gradient(90deg,#818cf8,#a78bfa)}
+.energy-fill.luck{background:linear-gradient(90deg,#34d399,#6ee7b7)}
+.affirmation{border-radius:12px;padding:1rem;margin:1.2rem 0;font-size:.85rem;line-height:1.7;transition:all 1.5s ease}
+.affirmation{background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.15);color:#c4b5fd}
+.affirmation::before{content:'"';font-size:1.5rem;display:block;margin-bottom:.2rem;transition:color 1.5s ease;color:#a78bfa}
 .lucky-items{display:flex;justify-content:center;gap:1.5rem;margin:1rem 0}
 .lucky-item{text-align:center}
 .lucky-item .li-icon{font-size:1.5rem;margin-bottom:.2rem}
-.lucky-item .li-label{font-size:.7rem;color:var(--text-soft)}
-.lucky-item .li-value{font-size:.8rem;color:var(--text);font-weight:700}
-.share-btn{background:var(--accent);color:#fff;border:none;padding:.7rem 2rem;border-radius:25px;font-size:.85rem;cursor:pointer;margin-top:1rem;font-family:inherit;box-shadow:0 4px 15px rgba(90,114,71,.2)}
+.lucky-item .li-label{font-size:.7rem;opacity:.5}
+.lucky-item .li-value{font-size:.8rem;font-weight:700;transition:color 1.5s ease}
+.share-btn{border:none;padding:.7rem 2rem;border-radius:25px;font-size:.85rem;cursor:pointer;margin-top:1rem;font-family:inherit;transition:all 1.5s ease}
+.share-btn{background:#a78bfa;color:#fff;box-shadow:0 4px 20px rgba(167,139,250,.3)}
 .share-btn:active{transform:scale(.95)}
-.footer{margin-top:2rem;font-size:.7rem;color:var(--bark);opacity:.3;padding-bottom:2rem}
+.footer{margin-top:2rem;font-size:.7rem;opacity:.3;padding-bottom:2rem;transition:color 1.5s ease}
+
+/* ====== THEME OVERRIDES ====== */
+/* 🌸 Sakura */
+body.theme-sakura{background:#fdf2f5;color:#4a2040}
+.theme-sakura .back-link{color:#b05888;border-color:rgba(176,88,136,.25)}
+.theme-sakura h1{color:#c2628a}
+.theme-sakura .card-back{background:#fffafc;border-color:rgba(194,98,138,.3);box-shadow:0 4px 25px rgba(194,98,138,.1)}
+.theme-sakura .card-back .card-name{color:#c2628a}
+.theme-sakura .card-back .kw{background:rgba(194,98,138,.12);color:#c2628a}
+.theme-sakura .card-back .card-wish{color:#d4729e}
+.theme-sakura .energy-track{background:rgba(194,98,138,.08)}
+.theme-sakura .affirmation{background:rgba(194,98,138,.05);border-color:rgba(194,98,138,.15);color:#8a4060}
+.theme-sakura .affirmation::before{color:#c2628a}
+.theme-sakura .share-btn{background:#c2628a;box-shadow:0 4px 20px rgba(194,98,138,.25)}
+
+/* 🌿 Forest */
+body.theme-forest{background:#f5f0e8;color:#3d3427}
+.theme-forest .back-link{color:#7a6e5d;border-color:rgba(90,114,71,.25)}
+.theme-forest h1{color:#5a7247}
+.theme-forest .card-back{background:#fffdf7;border-color:rgba(146,176,106,.35);box-shadow:0 4px 25px rgba(90,114,71,.1)}
+.theme-forest .card-back .card-name{color:#5a7247}
+.theme-forest .card-back .kw{background:rgba(146,176,106,.15);color:#5a7247}
+.theme-forest .card-back .card-wish{color:#c77dba}
+.theme-forest .energy-track{background:rgba(146,176,106,.1)}
+.theme-forest .energy-fill.love{background:linear-gradient(90deg,#c77dba,#e0a4d4)}
+.theme-forest .energy-fill.work{background:linear-gradient(90deg,#6a8caf,#92b5d4)}
+.theme-forest .energy-fill.luck{background:linear-gradient(90deg,#92b06a,#b8d48a)}
+.theme-forest .affirmation{background:rgba(146,176,106,.06);border-color:rgba(146,176,106,.2);color:#6b4f3a}
+.theme-forest .affirmation::before{color:#5a7247}
+.theme-forest .share-btn{background:#5a7247;box-shadow:0 4px 20px rgba(90,114,71,.2)}
+
+/* 🔮 Moonlight */
+body.theme-moon{background:#0e1525;color:#c8d4e8}
+.theme-moon .back-link{color:rgba(150,170,210,.6);border-color:rgba(100,140,200,.2)}
+.theme-moon h1{color:#7dabd4}
+.theme-moon .card-back{background:linear-gradient(145deg,#121d30,#0e1525);border-color:rgba(100,150,220,.3);box-shadow:0 0 40px rgba(100,150,220,.1)}
+.theme-moon .card-back .card-name{color:#7dabd4}
+.theme-moon .card-back .kw{background:rgba(100,150,220,.12);color:#7dabd4}
+.theme-moon .card-back .card-wish{color:#a8b8d8}
+.theme-moon .energy-track{background:rgba(100,150,220,.08)}
+.theme-moon .energy-fill.love{background:linear-gradient(90deg,#8b7ec8,#b8a9e8)}
+.theme-moon .energy-fill.work{background:linear-gradient(90deg,#5a8ab4,#7dabd4)}
+.theme-moon .energy-fill.luck{background:linear-gradient(90deg,#5a9e8f,#7ac4b4)}
+.theme-moon .affirmation{background:rgba(100,150,220,.06);border-color:rgba(100,150,220,.15);color:#a0b8d8}
+.theme-moon .affirmation::before{color:#7dabd4}
+.theme-moon .share-btn{background:#4a7aa8;box-shadow:0 4px 20px rgba(74,122,168,.3)}
+
+/* ⚡ Amber Fire */
+body.theme-fire{background:#1a0e08;color:#f0dcc8}
+.theme-fire .back-link{color:rgba(220,160,100,.6);border-color:rgba(220,160,100,.2)}
+.theme-fire h1{color:#e8a44a}
+.theme-fire .card-back{background:linear-gradient(145deg,#201208,#1a0e08);border-color:rgba(232,164,74,.3);box-shadow:0 0 40px rgba(232,164,74,.1)}
+.theme-fire .card-back .card-name{color:#e8a44a}
+.theme-fire .card-back .kw{background:rgba(232,164,74,.12);color:#e8a44a}
+.theme-fire .card-back .card-wish{color:#d4956a}
+.theme-fire .energy-track{background:rgba(232,164,74,.08)}
+.theme-fire .energy-fill.love{background:linear-gradient(90deg,#e86a4a,#f09060)}
+.theme-fire .energy-fill.work{background:linear-gradient(90deg,#e8a44a,#f0c06a)}
+.theme-fire .energy-fill.luck{background:linear-gradient(90deg,#c87a3a,#e09050)}
+.theme-fire .affirmation{background:rgba(232,164,74,.06);border-color:rgba(232,164,74,.15);color:#d4b08a}
+.theme-fire .affirmation::before{color:#e8a44a}
+.theme-fire .share-btn{background:#c87a30;box-shadow:0 4px 20px rgba(200,122,48,.3)}
+
+/* ⭐ Starlight Blue */
+body.theme-star{background:#f0f4fa;color:#2a3a5a}
+.theme-star .back-link{color:#6a80a8;border-color:rgba(106,128,168,.25)}
+.theme-star h1{color:#4a6a9a}
+.theme-star .card-back{background:#f8faff;border-color:rgba(106,128,168,.3);box-shadow:0 4px 25px rgba(74,106,154,.1)}
+.theme-star .card-back .card-name{color:#4a6a9a}
+.theme-star .card-back .kw{background:rgba(74,106,154,.1);color:#4a6a9a}
+.theme-star .card-back .card-wish{color:#8a6ab0}
+.theme-star .energy-track{background:rgba(74,106,154,.08)}
+.theme-star .energy-fill.love{background:linear-gradient(90deg,#a07ad4,#c0a0e8)}
+.theme-star .energy-fill.work{background:linear-gradient(90deg,#5a8ac4,#7aaae4)}
+.theme-star .energy-fill.luck{background:linear-gradient(90deg,#50b0a0,#70d0c0)}
+.theme-star .affirmation{background:rgba(74,106,154,.05);border-color:rgba(74,106,154,.15);color:#4a5a7a}
+.theme-star .affirmation::before{color:#4a6a9a}
+.theme-star .share-btn{background:#4a6a9a;box-shadow:0 4px 20px rgba(74,106,154,.25)}
+
+/* 🌈 Rainbow Dream */
+body.theme-rainbow{background:#fef9f0;color:#4a3a5a}
+.theme-rainbow .back-link{color:#9a6ab0;border-color:rgba(154,106,176,.25)}
+.theme-rainbow h1{color:#8a5aaa}
+.theme-rainbow .card-back{background:linear-gradient(145deg,#fff8fa,#f8f0ff);border-color:rgba(154,106,176,.25);box-shadow:0 4px 25px rgba(154,106,176,.1)}
+.theme-rainbow .card-back .card-name{color:#8a5aaa}
+.theme-rainbow .card-back .kw{background:rgba(154,106,176,.1);color:#8a5aaa}
+.theme-rainbow .card-back .card-wish{color:#d06090}
+.theme-rainbow .energy-track{background:rgba(154,106,176,.08)}
+.theme-rainbow .energy-fill.love{background:linear-gradient(90deg,#f472b6,#fb7185)}
+.theme-rainbow .energy-fill.work{background:linear-gradient(90deg,#a78bfa,#c4b5fd)}
+.theme-rainbow .energy-fill.luck{background:linear-gradient(90deg,#34d399,#6ee7b7)}
+.theme-rainbow .affirmation{background:rgba(154,106,176,.05);border-color:rgba(154,106,176,.15);color:#6a4a8a}
+.theme-rainbow .affirmation::before{color:#8a5aaa}
+.theme-rainbow .share-btn{background:linear-gradient(135deg,#a78bfa,#f472b6);box-shadow:0 4px 20px rgba(167,139,250,.3)}
+
+/* 👑 Royal Gold */
+body.theme-royal{background:#f8f3eb;color:#3a2e20}
+.theme-royal .back-link{color:#8a7a5a;border-color:rgba(180,140,60,.25)}
+.theme-royal h1{color:#8a6a20}
+.theme-royal .card-back{background:#fdfaf3;border-color:rgba(180,140,60,.3);box-shadow:0 4px 25px rgba(138,106,32,.1)}
+.theme-royal .card-back .card-name{color:#8a6a20}
+.theme-royal .card-back .kw{background:rgba(180,140,60,.12);color:#8a6a20}
+.theme-royal .card-back .card-wish{color:#b08a40}
+.theme-royal .energy-track{background:rgba(180,140,60,.08)}
+.theme-royal .energy-fill.love{background:linear-gradient(90deg,#c89040,#e0b060)}
+.theme-royal .energy-fill.work{background:linear-gradient(90deg,#8a7a5a,#b0a080)}
+.theme-royal .energy-fill.luck{background:linear-gradient(90deg,#a08a3a,#c0aa50)}
+.theme-royal .affirmation{background:rgba(180,140,60,.05);border-color:rgba(180,140,60,.15);color:#5a4a30}
+.theme-royal .affirmation::before{color:#8a6a20}
+.theme-royal .share-btn{background:#8a6a20;box-shadow:0 4px 20px rgba(138,106,32,.25)}
+
+/* ===== Background particles ===== */
+.particle{position:absolute;border-radius:50%;pointer-events:none}
+/* Stars (default) */
+.star{background:#fff;animation:twinkle var(--d) ease-in-out infinite var(--delay)}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:.8;transform:scale(1.3)}}
+/* Sakura petals */
+.petal{font-size:1rem;opacity:.4;animation:drift var(--d) linear infinite var(--delay)}
+@keyframes drift{0%{transform:translateY(-20px) rotate(0deg) translateX(0);opacity:0}10%{opacity:.4}90%{opacity:.4}100%{transform:translateY(calc(100vh + 20px)) rotate(360deg) translateX(40px);opacity:0}}
+/* Leaves */
+.leafp{font-size:1rem;opacity:.3;animation:fall var(--d) linear infinite var(--delay)}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:0}10%{opacity:.3}90%{opacity:.3}100%{transform:translateY(calc(100vh + 20px)) rotate(360deg);opacity:0}}
+/* Fireflies */
+.firefly{background:#e8a44a;animation:glow var(--d) ease-in-out infinite var(--delay)}
+@keyframes glow{0%,100%{opacity:.1;transform:scale(1) translateY(0)}50%{opacity:.7;transform:scale(1.5) translateY(-20px)}}
+/* Sparkles */
+.sparkle{animation:sparkle var(--d) ease-in-out infinite var(--delay)}
+@keyframes sparkle{0%,100%{opacity:.1;transform:scale(.5) rotate(0)}50%{opacity:.6;transform:scale(1.2) rotate(180deg)}}
 </style>
 </head>
 <body>
-<div class="leaves" id="leaves"></div>
+<div id="bgLayer"></div>
 <div class="container">
   <a class="back-link" href="index.html" id="backLink">← 返回</a>
-  <h1 id="pageTitle">🌿 每日一签</h1>
+  <h1 id="pageTitle">✨ 每日一签</h1>
   <div class="subtitle" id="pageSub"></div>
   <div class="date" id="dateDisplay"></div>
   <div class="card-container" onclick="flipCard()">
     <div class="card-inner" id="cardInner">
       <div class="card-front">
-        <div class="symbol">🌿</div>
-        <div class="tap-hint" id="tapHint">✨ 轻触翻牌 ✨</div>
+        <div class="symbol">🔮</div>
+        <div class="tap-hint" id="tapHint"></div>
       </div>
       <div class="card-back" id="cardBack"></div>
     </div>
   </div>
   <div class="result" id="result">
-    <div class="energy-bar"><div class="energy-label"><span id="loveLabel">💕 爱情能量</span><span id="lovePct"></span></div><div class="energy-track"><div class="energy-fill love" id="loveFill"></div></div></div>
-    <div class="energy-bar"><div class="energy-label"><span id="workLabel">💼 事业能量</span><span id="workPct"></span></div><div class="energy-track"><div class="energy-fill work" id="workFill"></div></div></div>
-    <div class="energy-bar"><div class="energy-label"><span id="luckLabel">🍀 幸运能量</span><span id="luckPct"></span></div><div class="energy-track"><div class="energy-fill luck" id="luckFill"></div></div></div>
+    <div class="energy-bar"><div class="energy-label"><span id="loveLabel"></span><span id="lovePct"></span></div><div class="energy-track"><div class="energy-fill love" id="loveFill"></div></div></div>
+    <div class="energy-bar"><div class="energy-label"><span id="workLabel"></span><span id="workPct"></span></div><div class="energy-track"><div class="energy-fill work" id="workFill"></div></div></div>
+    <div class="energy-bar"><div class="energy-label"><span id="luckLabel"></span><span id="luckPct"></span></div><div class="energy-track"><div class="energy-fill luck" id="luckFill"></div></div></div>
     <div class="affirmation" id="affirmation"></div>
     <div class="lucky-items">
       <div class="lucky-item"><div class="li-icon" id="luckyColorIcon">🎨</div><div class="li-label" id="colorLabel"></div><div class="li-value" id="luckyColor"></div></div>
       <div class="lucky-item"><div class="li-icon">🔢</div><div class="li-label" id="numLabel"></div><div class="li-value" id="luckyNum"></div></div>
       <div class="lucky-item"><div class="li-icon" id="luckyThingIcon">🌟</div><div class="li-label" id="thingLabel"></div><div class="li-value" id="luckyThing"></div></div>
     </div>
-    <button class="share-btn" onclick="shareCard()">📸 保存分享</button>
+    <button class="share-btn" onclick="shareCard()">📸</button>
   </div>
   <div class="footer" id="footerText"></div>
 </div>
 <script src="qr.min.js"></script>
 <script src="cards.js"></script>
 <script>
-// Leaves
-(function(){var e=document.getElementById('leaves');var em=['🍃','🌿','🍂','🌱','☘️'];for(var i=0;i<12;i++){var s=document.createElement('div');s.className='leaf';s.textContent=em[Math.floor(Math.random()*em.length)];s.style.cssText='left:'+Math.random()*100+'%;font-size:'+(0.8+Math.random()*1)+'rem;--d:'+(6+Math.random()*8)+'s;--delay:'+Math.random()*8+'s';e.appendChild(s)}})();
+// ===== THEME MAP =====
+var CARD_THEMES = {
+  '愚者':'rainbow','魔术师':'fire','女祭司':'moon','女皇':'sakura',
+  '皇帝':'royal','教皇':'royal','恋人':'sakura','战车':'fire',
+  '力量':'forest','隐士':'forest','命运之轮':'rainbow','正义':'star',
+  '倒吊人':'moon','死神':'rainbow','节制':'forest','恶魔':'fire',
+  '塔':'fire','星星':'star','月亮':'moon','太阳':'sakura',
+  '审判':'star','世界':'forest'
+};
+var THEME_PARTICLES = {
+  '': function(el){/* dark default: stars */
+    for(var i=0;i<60;i++){var s=document.createElement('div');s.className='particle star';var z=Math.random()*2.5+1;s.style.cssText='width:'+z+'px;height:'+z+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;--d:'+(2+Math.random()*4)+'s;--delay:'+Math.random()*3+'s';el.appendChild(s)}},
+  sakura: function(el){
+    var ps=['🌸','🏵️','💮','✿'];for(var i=0;i<18;i++){var s=document.createElement('div');s.className='particle petal';s.textContent=ps[i%ps.length];s.style.cssText='left:'+Math.random()*100+'%;font-size:'+(0.7+Math.random()*0.8)+'rem;--d:'+(5+Math.random()*6)+'s;--delay:'+Math.random()*6+'s';el.appendChild(s)}},
+  forest: function(el){
+    var ls=['🍃','🌿','🍂','🌱','☘️'];for(var i=0;i<14;i++){var s=document.createElement('div');s.className='particle leafp';s.textContent=ls[i%ls.length];s.style.cssText='left:'+Math.random()*100+'%;font-size:'+(0.8+Math.random()*0.8)+'rem;--d:'+(6+Math.random()*8)+'s;--delay:'+Math.random()*8+'s';el.appendChild(s)}},
+  moon: function(el){
+    for(var i=0;i<50;i++){var s=document.createElement('div');s.className='particle star';var z=Math.random()*2+1;s.style.cssText='width:'+z+'px;height:'+z+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;--d:'+(3+Math.random()*5)+'s;--delay:'+Math.random()*4+'s;background:#7dabd4';el.appendChild(s)}},
+  fire: function(el){
+    for(var i=0;i<25;i++){var s=document.createElement('div');s.className='particle firefly';var z=Math.random()*4+2;s.style.cssText='width:'+z+'px;height:'+z+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;--d:'+(2+Math.random()*4)+'s;--delay:'+Math.random()*3+'s';el.appendChild(s)}},
+  star: function(el){
+    var sp=['✦','✧','⋆','✶'];for(var i=0;i<30;i++){var s=document.createElement('div');s.className='particle sparkle';s.textContent=sp[i%sp.length];s.style.cssText='position:absolute;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;font-size:'+(0.5+Math.random()*0.7)+'rem;color:rgba(74,106,154,0.3);--d:'+(2+Math.random()*4)+'s;--delay:'+Math.random()*3+'s';el.appendChild(s)}},
+  rainbow: function(el){
+    var rc=['🌈','✨','💫','⭐','🦋'];for(var i=0;i<16;i++){var s=document.createElement('div');s.className='particle petal';s.textContent=rc[i%rc.length];s.style.cssText='left:'+Math.random()*100+'%;font-size:'+(0.7+Math.random()*0.7)+'rem;--d:'+(5+Math.random()*7)+'s;--delay:'+Math.random()*7+'s';el.appendChild(s)}},
+  royal: function(el){
+    var rp=['👑','✦','✧','⋆'];for(var i=0;i<20;i++){var s=document.createElement('div');s.className='particle sparkle';s.textContent=rp[i%rp.length];s.style.cssText='position:absolute;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;font-size:'+(0.5+Math.random()*0.6)+'rem;color:rgba(180,140,60,0.3);--d:'+(2+Math.random()*4)+'s;--delay:'+Math.random()*3+'s';el.appendChild(s)}}
+};
 
+function applyTheme(themeName){
+  // Remove old theme classes
+  document.body.className = themeName ? 'theme-'+themeName : '';
+  // Replace particles
+  var bg = document.getElementById('bgLayer');
+  bg.style.opacity='0';
+  setTimeout(function(){
+    bg.innerHTML='';
+    (THEME_PARTICLES[themeName]||THEME_PARTICLES[''])(bg);
+    bg.style.opacity='1';
+  },800);
+}
+
+// ===== INIT =====
 var seed=getDaySeed(),rng=seededRandom(seed);
 var todayCard=CARDS[Math.floor(rng()*CARDS.length)];
 var todayAffirm=AFFIRMATIONS[Math.floor(rng()*AFFIRMATIONS.length)];
@@ -104,9 +277,12 @@ var todayThing=THINGS[Math.floor(rng()*THINGS.length)];
 var love=Math.floor(rng()*25)+75,work=Math.floor(rng()*25)+75,luck=Math.floor(rng()*25)+75;
 var now=new Date(),weekdays=['日','一','二','三','四','五','六'];
 
+// Default: dark starry sky
+applyTheme('');
+
 if(LANG==='en'){var ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var ds=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];document.getElementById('dateDisplay').textContent=ds[now.getDay()]+', '+ms[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear()}else{document.getElementById('dateDisplay').textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 星期'+weekdays[now.getDay()]}
 document.getElementById('backLink').textContent=t(UI.back);
-document.getElementById('pageTitle').textContent='🌿 '+t(UI.daily_title);
+document.getElementById('pageTitle').textContent='✨ '+t(UI.daily_title);
 document.getElementById('pageSub').textContent=t(UI.daily_sub);
 document.getElementById('tapHint').textContent=t(UI.tap_hint);
 document.getElementById('loveLabel').textContent=t(UI.love_energy);
@@ -116,14 +292,19 @@ document.getElementById('colorLabel').textContent=t(UI.lucky_color);
 document.getElementById('numLabel').textContent=t(UI.lucky_num);
 document.getElementById('thingLabel').textContent=t(UI.lucky_thing);
 document.querySelector('.share-btn').textContent=t(UI.share_btn);
-document.getElementById('footerText').textContent=t(UI.footer_daily).replace('✨','🌿');
+document.getElementById('footerText').textContent=t(UI.footer_daily);
 
 var flipped=false;
 function flipCard(){
   if(flipped) return;
   flipped=true;
-  document.getElementById('cardBack').innerHTML='<div class="card-emoji">'+todayCard.emoji+'</div><div class="card-name">'+t(todayCard.name)+'</div><div class="card-name-en">'+(LANG==='zh'?todayCard.name.en:todayCard.name.zh)+'</div><div class="card-keyword">'+t(todayCard.keywords).map(function(k){return'<span class="kw">'+k+'</span>'}).join('')+'</div><div class="card-msg">'+t(todayCard.msg)+'</div><div class="card-wish">'+t(todayCard.wish)+' 🌿</div>';
+  document.getElementById('cardBack').innerHTML='<div class="card-emoji">'+todayCard.emoji+'</div><div class="card-name">'+t(todayCard.name)+'</div><div class="card-name-en">'+(LANG==='zh'?todayCard.name.en:todayCard.name.zh)+'</div><div class="card-keyword">'+t(todayCard.keywords).map(function(k){return'<span class="kw">'+k+'</span>'}).join('')+'</div><div class="card-msg">'+t(todayCard.msg)+'</div><div class="card-wish">'+t(todayCard.wish)+' ✨</div>';
   document.getElementById('cardInner').classList.add('flipped');
+  // Switch theme after flip animation
+  var cardTheme = CARD_THEMES[todayCard.name.zh] || '';
+  setTimeout(function(){
+    applyTheme(cardTheme);
+  }, 600);
   setTimeout(function(){
     document.getElementById('result').classList.add('show');
     setTimeout(function(){
@@ -142,25 +323,25 @@ function shareCard(){
   var btn=document.querySelector('.share-btn');btn.textContent=t(UI.generating);btn.disabled=true;
   try{
     var W=750,H=1334,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
-    // Forest background
-    ctx.fillStyle='#f5f0e8';ctx.fillRect(0,0,W,H);
-    // Subtle leaf pattern
-    ctx.globalAlpha=0.04;ctx.font='30px serif';for(var i=0;i<30;i++){ctx.fillText(['🍃','🌿','☘️','🌱'][i%4],Math.random()*W,Math.random()*H)}ctx.globalAlpha=1;
+    var th=CARD_THEMES[todayCard.name.zh]||'';
+    var bg={sakura:['#fdf2f5','#c2628a','#4a2040'],forest:['#f5f0e8','#5a7247','#3d3427'],moon:['#0e1525','#7dabd4','#c8d4e8'],fire:['#1a0e08','#e8a44a','#f0dcc8'],star:['#f0f4fa','#4a6a9a','#2a3a5a'],rainbow:['#fef9f0','#8a5aaa','#4a3a5a'],royal:['#f8f3eb','#8a6a20','#3a2e20']};
+    var colors=bg[th]||['#0f0a1a','#a78bfa','#e2e0ef'];
+    ctx.fillStyle=colors[0];ctx.fillRect(0,0,W,H);
     function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,W-80)}
     function wt(tx,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=tx.split(''),line='',cy=y;for(var j=0;j<ch.length;j++){var test=line+ch[j];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[j];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
-    ft('🌿 '+t(UI.daily_title),W/2,70,'bold 36px sans-serif','#5a7247');
+    ft('✨ '+t(UI.daily_title),W/2,70,'bold 36px sans-serif',colors[1]);
     var dateStr=LANG==='en'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate()+', '+now.getFullYear():now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日';
-    ft(dateStr,W/2,115,'20px sans-serif','#8fa97a');
-    ctx.strokeStyle='rgba(146,176,106,0.35)';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(120,150,510,520,20);ctx.stroke();
-    ctx.fillStyle='#fffdf7';ctx.beginPath();ctx.roundRect(120,150,510,520,20);ctx.fill();
-    ft(todayCard.emoji,W/2,230,'60px sans-serif','#000');ft(t(todayCard.name),W/2,290,'bold 32px sans-serif','#5a7247');ft(LANG==='zh'?todayCard.name.en:todayCard.name.zh,W/2,320,'18px sans-serif','#7a6e5d');
-    ft(t(todayCard.keywords).join('  ·  '),W/2,358,'18px sans-serif','#8fa97a');
-    var ey=wt(t(todayCard.msg),W/2,405,'22px sans-serif','#3d3427',440,34);
-    ft(t(todayCard.wish)+' 🌿',W/2,ey+45,'italic 20px sans-serif','#c77dba');
-    var by=710;[{l:t(UI.love_energy),v:love,c:['#c77dba','#e0a4d4']},{l:t(UI.work_energy),v:work,c:['#6a8caf','#92b5d4']},{l:t(UI.luck_energy),v:luck,c:['#92b06a','#b8d48a']}].forEach(function(b){ft(b.l,90,by,'18px sans-serif','#7a6e5d','left');ft(b.v+'%',W-90,by,'18px sans-serif','#3d3427','right');ctx.fillStyle='rgba(146,176,106,0.1)';ctx.beginPath();ctx.roundRect(90,by+10,W-180,10,5);ctx.fill();var bg=ctx.createLinearGradient(90,0,90+(W-180)*b.v/100,0);bg.addColorStop(0,b.c[0]);bg.addColorStop(1,b.c[1]);ctx.fillStyle=bg;ctx.beginPath();ctx.roundRect(90,by+10,(W-180)*b.v/100,10,5);ctx.fill();by+=55});
-    var ay=by+15;ctx.fillStyle='rgba(146,176,106,0.06)';ctx.strokeStyle='rgba(146,176,106,0.2)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(70,ay,W-140,70,12);ctx.fill();ctx.stroke();ft('" '+t(todayAffirm),W/2,ay+42,'22px sans-serif','#6b4f3a');
-    var ly=ay+100;ft(todayColor.icon+' '+t(UI.lucky_color),W/2-200,ly,'16px sans-serif','#7a6e5d');ft(t(todayColor.name),W/2-200,ly+28,'bold 20px sans-serif','#3d3427');ft('🔢 '+t(UI.lucky_num),W/2,ly,'16px sans-serif','#7a6e5d');ft(String(todayNum),W/2,ly+28,'bold 20px sans-serif','#3d3427');ft(todayThing.icon+' '+t(UI.lucky_thing),W/2+200,ly,'16px sans-serif','#7a6e5d');ft(t(todayThing.name),W/2+200,ly+28,'bold 20px sans-serif','#3d3427');
-    var qrc=generateQRCanvas('https://tarot.1yong.com',120),qy=ly+80;ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(W/2-65,qy-5,130,130,8);ctx.fill();ctx.drawImage(qrc,W/2-60,qy,120,120);ft(t(UI.qr_hint),W/2,qy+148,'16px sans-serif','rgba(61,52,39,0.3)');
+    ft(dateStr,W/2,115,'20px sans-serif',colors[1]);
+    ctx.strokeStyle=colors[1]+'40';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(120,150,510,520,20);ctx.stroke();
+    ctx.fillStyle=colors[0]==='#0f0a1a'||colors[0]==='#0e1525'||colors[0]==='#1a0e08'?colors[0]+'e0':'#ffffffcc';ctx.beginPath();ctx.roundRect(120,150,510,520,20);ctx.fill();
+    ft(todayCard.emoji,W/2,230,'60px sans-serif','#000');ft(t(todayCard.name),W/2,290,'bold 32px sans-serif',colors[1]);ft(LANG==='zh'?todayCard.name.en:todayCard.name.zh,W/2,320,'18px sans-serif',colors[2]+'99');
+    ft(t(todayCard.keywords).join('  ·  '),W/2,358,'18px sans-serif',colors[1]+'aa');
+    var ey=wt(t(todayCard.msg),W/2,405,'22px sans-serif',colors[2],440,34);
+    ft(t(todayCard.wish)+' ✨',W/2,ey+45,'italic 20px sans-serif',colors[1]);
+    var by=710;[{l:t(UI.love_energy),v:love},{l:t(UI.work_energy),v:work},{l:t(UI.luck_energy),v:luck}].forEach(function(b){ft(b.l,90,by,'18px sans-serif',colors[2]+'aa','left');ft(b.v+'%',W-90,by,'18px sans-serif',colors[2],'right');ctx.fillStyle=colors[1]+'15';ctx.beginPath();ctx.roundRect(90,by+10,W-180,10,5);ctx.fill();ctx.fillStyle=colors[1]+'88';ctx.beginPath();ctx.roundRect(90,by+10,(W-180)*b.v/100,10,5);ctx.fill();by+=55});
+    var ay=by+15;ctx.fillStyle=colors[1]+'0a';ctx.strokeStyle=colors[1]+'25';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(70,ay,W-140,70,12);ctx.fill();ctx.stroke();ft('" '+t(todayAffirm),W/2,ay+42,'22px sans-serif',colors[2]);
+    var ly=ay+100;ft(todayColor.icon+' '+t(UI.lucky_color),W/2-200,ly,'16px sans-serif',colors[2]+'aa');ft(t(todayColor.name),W/2-200,ly+28,'bold 20px sans-serif',colors[2]);ft('🔢 '+t(UI.lucky_num),W/2,ly,'16px sans-serif',colors[2]+'aa');ft(String(todayNum),W/2,ly+28,'bold 20px sans-serif',colors[2]);ft(todayThing.icon+' '+t(UI.lucky_thing),W/2+200,ly,'16px sans-serif',colors[2]+'aa');ft(t(todayThing.name),W/2+200,ly+28,'bold 20px sans-serif',colors[2]);
+    var qrc=generateQRCanvas('https://tarot.1yong.com',120),qy=ly+80;ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(W/2-65,qy-5,130,130,8);ctx.fill();ctx.drawImage(qrc,W/2-60,qy,120,120);ft(t(UI.qr_hint),W/2,qy+148,'16px sans-serif',colors[2]+'55');
     c.toBlob(function(blob){var f=new File([blob],'daily-tarot.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:t(UI.daily_title)}).catch(function(){})}else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='daily-tarot.png';a.click();URL.revokeObjectURL(a.href)}btn.textContent=t(UI.share_btn);btn.disabled=false},'image/png');
   }catch(e){alert(t(UI.share_fail)+e.message);btn.textContent=t(UI.share_btn);btn.disabled=false}
 }

@@ -9,24 +9,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Serif SC',serif;background:#0f0a1a;color:#e2e0ef;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-x:hidden}
-.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
-.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite var(--delay)}
-@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:.8;transform:scale(1.3)}}
-.container{position:relative;z-index:1;text-align:center;padding:2rem 1.2rem;max-width:420px;width:100%}
-h1{font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
-.subtitle{font-size:.88rem;color:rgba(226,224,239,.5);margin-bottom:2.5rem}
+body{font-family:'Noto Serif SC',serif;background:#fcfbff;color:#1e1930;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-x:hidden}
+.container{text-align:center;padding:2rem 1.2rem;max-width:420px;width:100%}
+h1{font-size:1.8rem;font-weight:700;color:#2a2045;margin-bottom:.4rem}
+.subtitle{font-size:.88rem;color:#8a80a0;margin-bottom:2.5rem}
 .cards{display:flex;flex-direction:column;gap:1.2rem}
-.entry-card{background:rgba(255,255,255,.04);border:1.5px solid rgba(167,139,250,.2);border-radius:20px;padding:2rem 1.5rem;cursor:pointer;text-decoration:none;color:#e2e0ef;transition:all .3s ease;box-shadow:0 0 30px rgba(167,139,250,.05);display:block}
-.entry-card:hover,.entry-card:active{transform:translateY(-3px);box-shadow:0 0 40px rgba(167,139,250,.15);border-color:rgba(167,139,250,.4)}
-.entry-card .icon{font-size:3rem;margin-bottom:.8rem}
-.entry-card .title{font-size:1.2rem;font-weight:700;color:#c4b5fd;margin-bottom:.4rem}
-.entry-card .desc{font-size:.82rem;color:rgba(226,224,239,.5);line-height:1.6}
-.footer{margin-top:3rem;font-size:.7rem;color:rgba(167,139,250,.3)}
+.entry-card{
+  background:#f8f6ff;border:1px solid rgba(140,120,180,.12);
+  border-radius:18px;padding:2rem 1.5rem;cursor:pointer;text-decoration:none;color:#1e1930;
+  transition:all .3s ease;display:block;
+}
+.entry-card:hover,.entry-card:active{transform:translateY(-2px);box-shadow:0 4px 20px rgba(100,80,160,.08);border-color:rgba(140,120,180,.25)}
+.entry-card .icon{font-size:2.5rem;margin-bottom:.6rem}
+.entry-card .title{font-size:1.15rem;font-weight:700;color:#2a2045;margin-bottom:.3rem}
+.entry-card .desc{font-size:.82rem;color:#8a80a0;line-height:1.6}
+.footer{margin-top:3rem;font-size:.7rem;color:#c5c0d5}
 </style>
 </head>
 <body>
-<div class="stars" id="stars"></div>
 <div class="container">
   <h1 id="siteTitle"></h1>
   <div class="subtitle" id="siteSub"></div>
@@ -46,7 +46,6 @@ h1{font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,#a78bfa,#f
 </div>
 <script src="cards.js"></script>
 <script>
-createStars();
 document.getElementById('siteTitle').textContent = t(UI.site_name);
 document.getElementById('siteSub').textContent = t(UI.site_sub);
 document.getElementById('dailyTitle').textContent = t(UI.daily_title);

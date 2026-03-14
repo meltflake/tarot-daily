@@ -8,60 +8,56 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Serif SC',serif;background:#0f0a1a;color:#e2e0ef;min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
-.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
-.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite var(--delay)}
-@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:.8;transform:scale(1.3)}}
-.container{position:relative;z-index:1;max-width:420px;width:100%;padding:2rem 1.2rem;text-align:center}
-.back-link{display:inline-block;color:rgba(255,255,255,.4);font-size:.8rem;text-decoration:none;margin-bottom:1rem;padding:.3rem .8rem;border:1px solid rgba(255,255,255,.1);border-radius:15px}
-.back-link:hover{border-color:rgba(167,139,250,.4);color:#c4b5fd}
-h1{font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem}
-.subtitle{font-size:.85rem;color:rgba(226,224,239,.5);margin-bottom:1.5rem}
-.date{font-size:.78rem;color:rgba(167,139,250,.5);margin-bottom:1.5rem;letter-spacing:2px}
+body{font-family:'Noto Serif SC',serif;background:#fcfbff;color:#1e1930;min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
+.container{max-width:420px;width:100%;padding:2rem 1.2rem;text-align:center}
+.back-link{display:inline-block;color:#a098b8;font-size:.8rem;text-decoration:none;margin-bottom:1rem;padding:.3rem .8rem;border:1px solid rgba(140,120,180,.15);border-radius:15px}
+.back-link:hover{border-color:rgba(140,120,180,.35);color:#6a5a90}
+h1{font-size:1.5rem;font-weight:700;color:#2a2045;margin-bottom:.3rem}
+.subtitle{font-size:.85rem;color:#8a80a0;margin-bottom:1.5rem}
+.date{font-size:.78rem;color:#b5aec8;margin-bottom:1.5rem;letter-spacing:2px}
 .card-container{perspective:800px;margin:0 auto 2rem;width:260px;height:400px;cursor:pointer}
 .card-inner{position:relative;width:100%;height:100%;transition:transform .8s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
 .card-inner.flipped{transform:rotateY(180deg)}
 .card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:16px;overflow:hidden}
-.card-front{background:rgba(255,255,255,.04);border:2px solid rgba(167,139,250,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(167,139,250,.1)}
+.card-front{background:#f8f6ff;border:1px solid rgba(140,120,180,.15);display:flex;flex-direction:column;align-items:center;justify-content:center}
 .card-front .symbol{font-size:4rem;margin-bottom:1rem;animation:float 3s ease-in-out infinite}
-.card-front .tap-hint{font-size:.8rem;color:rgba(167,139,250,.6);animation:pulse 2s ease-in-out infinite}
+.card-front .tap-hint{font-size:.8rem;color:#a098b8;animation:pulse 2s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
-.card-back{transform:rotateY(180deg);background:linear-gradient(145deg,#1a1230,#0f0a1a);border:2px solid rgba(167,139,250,.3);display:flex;flex-direction:column;align-items:center;padding:1.5rem 1.2rem;box-shadow:0 0 40px rgba(167,139,250,.15)}
+.card-back{transform:rotateY(180deg);background:#f8f6ff;border:1px solid rgba(140,120,180,.18);display:flex;flex-direction:column;align-items:center;padding:1.5rem 1.2rem}
 .card-back .card-emoji{font-size:3rem;margin-bottom:.5rem}
-.card-back .card-name{font-size:1.1rem;font-weight:700;color:#f5c542;margin-bottom:.2rem}
-.card-back .card-name-en{font-size:.75rem;color:#a8a3c0;margin-bottom:.8rem}
+.card-back .card-name{font-size:1.1rem;font-weight:700;color:#2a2045;margin-bottom:.2rem}
+.card-back .card-name-en{font-size:.75rem;color:#a098b8;margin-bottom:.8rem}
 .card-back .card-keyword{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin-bottom:.8rem}
-.card-back .kw{background:rgba(167,139,250,.15);color:#a78bfa;padding:.2rem .6rem;border-radius:20px;font-size:.72rem}
-.card-back .card-msg{font-size:.88rem;line-height:1.7;color:#e2e0ef;flex:1;display:flex;align-items:center;text-align:center}
-.card-back .card-wish{font-size:.78rem;color:#f472b6;margin-top:.6rem;font-style:italic}
+.card-back .kw{background:rgba(140,120,180,.08);color:#6a5a90;padding:.2rem .6rem;border-radius:20px;font-size:.72rem}
+.card-back .card-msg{font-size:.88rem;line-height:1.7;color:#3a3050;flex:1;display:flex;align-items:center;text-align:center}
+.card-back .card-wish{font-size:.78rem;color:#a088b8;margin-top:.6rem;font-style:italic}
 .result{display:none;margin-top:1rem}
 .result.show{display:block;animation:fadeUp .6s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .energy-bar{margin:1.2rem 0;text-align:left}
-.energy-label{font-size:.78rem;color:rgba(226,224,239,.6);margin-bottom:.4rem;display:flex;justify-content:space-between}
-.energy-track{height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.energy-label{font-size:.78rem;color:#8a80a0;margin-bottom:.4rem;display:flex;justify-content:space-between}
+.energy-track{height:5px;background:rgba(140,120,180,.06);border-radius:3px;overflow:hidden}
 .energy-fill{height:100%;border-radius:3px;transition:width 1.5s ease;width:0}
-.energy-fill.love{background:linear-gradient(90deg,#f472b6,#fb7185)}
-.energy-fill.work{background:linear-gradient(90deg,#818cf8,#a78bfa)}
-.energy-fill.luck{background:linear-gradient(90deg,#34d399,#6ee7b7)}
-.affirmation{background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.15);border-radius:12px;padding:1rem;margin:1.2rem 0;font-size:.85rem;line-height:1.7;color:#c4b5fd}
-.affirmation::before{content:'"';font-size:1.5rem;color:#a78bfa;display:block;margin-bottom:.2rem}
+.energy-fill.love{background:linear-gradient(90deg,#d4a0c0,#e8b8d4)}
+.energy-fill.work{background:linear-gradient(90deg,#8898c8,#a0b0e0)}
+.energy-fill.luck{background:linear-gradient(90deg,#88c4a0,#a8dcc0)}
+.affirmation{background:rgba(140,120,180,.04);border:1px solid rgba(140,120,180,.1);border-radius:12px;padding:1rem;margin:1.2rem 0;font-size:.85rem;line-height:1.7;color:#5a4a78}
+.affirmation::before{content:'"';font-size:1.5rem;color:#a098b8;display:block;margin-bottom:.2rem}
 .lucky-items{display:flex;justify-content:center;gap:1.5rem;margin:1rem 0}
 .lucky-item{text-align:center}
 .lucky-item .li-icon{font-size:1.5rem;margin-bottom:.2rem}
-.lucky-item .li-label{font-size:.7rem;color:rgba(226,224,239,.4)}
-.lucky-item .li-value{font-size:.8rem;color:#e2e0ef;font-weight:700}
-.share-btn{background:#a78bfa;color:#fff;border:none;padding:.7rem 2rem;border-radius:25px;font-size:.85rem;cursor:pointer;margin-top:1rem;font-family:inherit;box-shadow:0 4px 20px rgba(167,139,250,.3)}
+.lucky-item .li-label{font-size:.7rem;color:#a098b8}
+.lucky-item .li-value{font-size:.8rem;color:#2a2045;font-weight:700}
+.share-btn{background:#6a5a90;color:#fff;border:none;padding:.7rem 2rem;border-radius:25px;font-size:.85rem;cursor:pointer;margin-top:1rem;font-family:inherit}
 .share-btn:active{transform:scale(.95)}
-.footer{margin-top:2rem;font-size:.7rem;color:rgba(167,139,250,.3);padding-bottom:2rem}
+.footer{margin-top:2rem;font-size:.7rem;color:#c5c0d5;padding-bottom:2rem}
 </style>
 </head>
 <body>
-<div class="stars" id="stars"></div>
 <div class="container">
-  <a class="back-link" href="index.html" id="backLink">← 返回</a>
-  <h1 id="pageTitle">✨ 每日一签</h1>
+  <a class="back-link" href="index.html" id="backLink"></a>
+  <h1 id="pageTitle"></h1>
   <div class="subtitle" id="pageSub"></div>
   <div class="date" id="dateDisplay"></div>
   <div class="card-container" onclick="flipCard()">
@@ -79,18 +75,17 @@ h1{font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,#a78bfa,#f
     <div class="energy-bar"><div class="energy-label"><span id="luckLabel"></span><span id="luckPct"></span></div><div class="energy-track"><div class="energy-fill luck" id="luckFill"></div></div></div>
     <div class="affirmation" id="affirmation"></div>
     <div class="lucky-items">
-      <div class="lucky-item"><div class="li-icon" id="luckyColorIcon">🎨</div><div class="li-label" id="colorLabel"></div><div class="li-value" id="luckyColor"></div></div>
+      <div class="lucky-item"><div class="li-icon" id="luckyColorIcon"></div><div class="li-label" id="colorLabel"></div><div class="li-value" id="luckyColor"></div></div>
       <div class="lucky-item"><div class="li-icon">🔢</div><div class="li-label" id="numLabel"></div><div class="li-value" id="luckyNum"></div></div>
-      <div class="lucky-item"><div class="li-icon" id="luckyThingIcon">🌟</div><div class="li-label" id="thingLabel"></div><div class="li-value" id="luckyThing"></div></div>
+      <div class="lucky-item"><div class="li-icon" id="luckyThingIcon"></div><div class="li-label" id="thingLabel"></div><div class="li-value" id="luckyThing"></div></div>
     </div>
-    <button class="share-btn" onclick="shareCard()">📸</button>
+    <button class="share-btn" onclick="shareCard()"></button>
   </div>
   <div class="footer" id="footerText"></div>
 </div>
 <script src="qr.min.js"></script>
 <script src="cards.js"></script>
 <script>
-createStars();
 var seed=getDaySeed(),rng=seededRandom(seed);
 var todayCard=CARDS[Math.floor(rng()*CARDS.length)];
 var todayAffirm=AFFIRMATIONS[Math.floor(rng()*AFFIRMATIONS.length)];
@@ -102,7 +97,7 @@ var now=new Date(),weekdays=['日','一','二','三','四','五','六'];
 
 if(LANG==='en'){var ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var ds=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];document.getElementById('dateDisplay').textContent=ds[now.getDay()]+', '+ms[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear()}else{document.getElementById('dateDisplay').textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 星期'+weekdays[now.getDay()]}
 document.getElementById('backLink').textContent=t(UI.back);
-document.getElementById('pageTitle').textContent='✨ '+t(UI.daily_title);
+document.getElementById('pageTitle').textContent=t(UI.daily_h1);
 document.getElementById('pageSub').textContent=t(UI.daily_sub);
 document.getElementById('tapHint').textContent=t(UI.tap_hint);
 document.getElementById('loveLabel').textContent=t(UI.love_energy);
@@ -117,7 +112,7 @@ document.getElementById('footerText').textContent=t(UI.footer_daily);
 var flipped=false;
 function flipCard(){
   if(flipped) return;flipped=true;
-  document.getElementById('cardBack').innerHTML='<div class="card-emoji">'+todayCard.emoji+'</div><div class="card-name">'+t(todayCard.name)+'</div><div class="card-name-en">'+(LANG==='zh'?todayCard.name.en:todayCard.name.zh)+'</div><div class="card-keyword">'+t(todayCard.keywords).map(function(k){return'<span class="kw">'+k+'</span>'}).join('')+'</div><div class="card-msg">'+t(todayCard.msg)+'</div><div class="card-wish">'+t(todayCard.wish)+' 💫</div>';
+  document.getElementById('cardBack').innerHTML='<div class="card-emoji">'+todayCard.emoji+'</div><div class="card-name">'+t(todayCard.name)+'</div><div class="card-name-en">'+(LANG==='zh'?todayCard.name.en:todayCard.name.zh)+'</div><div class="card-keyword">'+t(todayCard.keywords).map(function(k){return'<span class="kw">'+k+'</span>'}).join('')+'</div><div class="card-msg">'+t(todayCard.msg)+'</div><div class="card-wish">'+t(todayCard.wish)+' ✨</div>';
   document.getElementById('cardInner').classList.add('flipped');
   setTimeout(function(){
     document.getElementById('result').classList.add('show');
@@ -137,33 +132,24 @@ function shareCard(){
   try{
     var S=2,w=660,h=1000,W=w*S,H=h*S,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
     ctx.scale(S,S);
-    // White background
     ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
     function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,w-100)}
     function wt(tx,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=tx.split(''),line='',cy=y;for(var j=0;j<ch.length;j++){var test=line+ch[j];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[j];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
-    // Card name — hero
     ft(t(todayCard.name),w/2,300,'bold 36px sans-serif','#000');
     ft(LANG==='zh'?todayCard.name.en:todayCard.name.zh,w/2,340,'14px sans-serif','#a0a0a0');
-    // Keywords
     ft(t(todayCard.keywords).join('  ·  '),w/2,388,'13px sans-serif','#b4b4b4');
-    // Divider
     ctx.strokeStyle='#e6e6e6';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(200,418);ctx.lineTo(w-200,418);ctx.stroke();
-    // Message
     var ey=wt(t(todayCard.msg),w/2,468,'19px sans-serif','#3c3c3c',440,36);
-    // Wish
     ft(t(todayCard.wish),w/2,ey+48,'17px sans-serif','#a0a0a0');
-    // Energy
     ft('💕 '+love+'%    💼 '+work+'%    🍀 '+luck+'%',w/2,ey+95,'13px sans-serif','#c3c3c3');
-    // QR — centered small
     var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',96);
     var qy=h-105;ctx.globalAlpha=0.92;ctx.drawImage(qrc,w/2-24,qy,48,48);ctx.globalAlpha=1;
-    // Date
     var dateStr=LANG==='en'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate()+', '+now.getFullYear():now.getFullYear()+'.'+(now.getMonth()+1)+'.'+now.getDate();
     ft(dateStr,w/2,h-40,'11px sans-serif','#d7d7d7');
     var dataUrl=c.toDataURL('image/png');
     var shareImg=document.getElementById('shareImg');
-    if(!shareImg){shareImg=document.createElement('img');shareImg.id='shareImg';shareImg.style.cssText='max-width:90%;border-radius:8px;margin:1rem auto;display:block;box-shadow:0 2px 20px rgba(0,0,0,.3)';document.querySelector('.result').appendChild(shareImg);
-      var tip=document.createElement('div');tip.id='shareTip';tip.style.cssText='font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.5rem;text-align:center';document.querySelector('.result').appendChild(tip)}
+    if(!shareImg){shareImg=document.createElement('img');shareImg.id='shareImg';shareImg.style.cssText='max-width:90%;border-radius:8px;margin:1rem auto;display:block;box-shadow:0 2px 15px rgba(100,80,160,.1)';document.querySelector('.result').appendChild(shareImg);
+      var tip=document.createElement('div');tip.id='shareTip';tip.style.cssText='font-size:.75rem;color:#a098b8;margin-top:.5rem;text-align:center';document.querySelector('.result').appendChild(tip)}
     shareImg.src=dataUrl;
     document.getElementById('shareTip').textContent=LANG==='zh'?'👆 长按图片保存到相册':'👆 Long press to save';
     btn.textContent=t(UI.share_btn);btn.disabled=false;

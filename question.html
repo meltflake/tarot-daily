@@ -109,21 +109,38 @@ function askAgain(){flipped=false;currentCard=null;currentQuestion='';document.g
 function shareCard(){
   if(!currentCard)return;var btn=document.querySelector('.share-btn');btn.textContent=t(UI.generating);btn.disabled=true;
   try{
-    var W=750,H=1100,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
-    var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#1a1040');g.addColorStop(1,'#0a0618');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-    ctx.fillStyle='rgba(255,255,255,0.5)';for(var i=0;i<60;i++){var sz=Math.random()*2+0.5;ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,sz,0,Math.PI*2);ctx.fill()}
-    function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,W-80)}
+    var W=660,H=920,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
+    // Background
+    var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#16103a');g.addColorStop(0.5,'#0f0a1a');g.addColorStop(1,'#0a0615');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    for(var i=0;i<40;i++){ctx.fillStyle='rgba(255,255,255,'+(0.15+Math.random()*0.4)+')';var sz=Math.random()*1.8+0.3;ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,sz,0,Math.PI*2);ctx.fill()}
+    function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,W-100)}
     function wt(tx,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=tx.split(''),line='',cy=y;for(var j=0;j<ch.length;j++){var test=line+ch[j];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[j];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
-    ft('🔮 '+t(UI.question_title),W/2,60,'bold 32px sans-serif','#a78bfa');
-    ft('💭 "'+currentQuestion+'"',W/2,110,'20px sans-serif','#e2e0ef');
-    ft(t(TOPIC_LABELS[currentTopic]),W/2,145,'16px sans-serif','#f472b6');
-    ctx.strokeStyle='rgba(167,139,250,0.3)';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(120,175,510,500,20);ctx.stroke();
-    ctx.fillStyle='rgba(26,18,48,0.8)';ctx.beginPath();ctx.roundRect(120,175,510,500,20);ctx.fill();
-    ft(currentCard.emoji,W/2,250,'55px sans-serif','#fff');ft(t(currentCard.name),W/2,305,'bold 30px sans-serif','#f5c542');ft(LANG==='zh'?currentCard.name.en:currentCard.name.zh,W/2,332,'16px sans-serif','#a8a3c0');
-    ft(t(currentCard.keywords).join('  ·  '),W/2,365,'16px sans-serif','#a78bfa');
+    // Question echo
+    var qText=currentQuestion.length>18?currentQuestion.slice(0,18)+'…':currentQuestion;
+    ft('💭 "'+qText+'"',W/2,48,'16px sans-serif','rgba(226,224,239,0.5)');
+    // Topic label
+    ft(t(TOPIC_LABELS[currentTopic]),W/2,78,'14px sans-serif','rgba(244,114,182,0.55)');
+    // Divider
+    ctx.strokeStyle='rgba(167,139,250,0.12)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2-60,95);ctx.lineTo(W/2+60,95);ctx.stroke();
+    // Emoji
+    ft(currentCard.emoji,W/2,175,'68px sans-serif','#fff');
+    // Name
+    ft(t(currentCard.name),W/2,235,'bold 32px sans-serif','#e8dff5');
+    ft(LANG==='zh'?currentCard.name.en:currentCard.name.zh,W/2,264,'15px sans-serif','rgba(168,163,192,0.6)');
+    // Keywords
+    ft(t(currentCard.keywords).join('  ·  '),W/2,305,'15px sans-serif','rgba(167,139,250,0.55)');
+    // Divider
+    ctx.strokeStyle='rgba(167,139,250,0.1)';ctx.beginPath();ctx.moveTo(100,328);ctx.lineTo(W-100,328);ctx.stroke();
+    // Reading
     var msg=t(currentCard.msg);var qr=Q_READINGS[currentCard.name.zh];if(qr&&qr[currentTopic])msg=t(qr[currentTopic]);
-    var ey=wt(msg,W/2,410,'22px sans-serif','#e2e0ef',440,34);ft(t(currentCard.wish)+' 💫',W/2,ey+40,'italic 18px sans-serif','#f472b6');
-    var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',100),qy=740;ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(W/2-55,qy-5,110,110,8);ctx.fill();ctx.drawImage(qrc,W/2-50,qy,100,100);ft(t(UI.qr_hint_q),W/2,qy+128,'15px sans-serif','rgba(255,255,255,0.3)');
+    var ey=wt(msg,W/2,375,'20px sans-serif','rgba(226,224,239,0.85)',480,32);
+    // Wish
+    ft('"'+t(currentCard.wish)+'"',W/2,ey+50,'italic 17px sans-serif','rgba(244,114,182,0.7)');
+    // QR
+    var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',72);
+    var qy=H-120;
+    ctx.globalAlpha=0.9;ctx.drawImage(qrc,W/2-36,qy,72,72);ctx.globalAlpha=1;
+    ft(t(UI.qr_hint_q),W/2,qy+95,'12px sans-serif','rgba(255,255,255,0.2)');
     c.toBlob(function(blob){var f=new File([blob],'tarot-question.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:t(UI.question_title)}).catch(function(){})}else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tarot-question.png';a.click();URL.revokeObjectURL(a.href)}btn.textContent=t(UI.share_btn);btn.disabled=false},'image/png');
   }catch(e){alert(t(UI.share_fail)+e.message);btn.textContent=t(UI.share_btn);btn.disabled=false}
 }

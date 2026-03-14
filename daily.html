@@ -135,24 +135,47 @@ function flipCard(){
 function shareCard(){
   var btn=document.querySelector('.share-btn');btn.textContent=t(UI.generating);btn.disabled=true;
   try{
-    var W=750,H=1334,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
-    var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#1a1040');g.addColorStop(1,'#0a0618');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-    ctx.fillStyle='rgba(255,255,255,0.5)';for(var i=0;i<80;i++){var sz=Math.random()*2+0.5;ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,sz,0,Math.PI*2);ctx.fill()}
-    function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,W-80)}
+    var W=660,H=1000,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
+    // Background
+    var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#16103a');g.addColorStop(0.5,'#0f0a1a');g.addColorStop(1,'#0a0615');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    // Stars
+    for(var i=0;i<50;i++){ctx.fillStyle='rgba(255,255,255,'+(0.15+Math.random()*0.4)+')';var sz=Math.random()*1.8+0.3;ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,sz,0,Math.PI*2);ctx.fill()}
+    function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,W-100)}
     function wt(tx,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=tx.split(''),line='',cy=y;for(var j=0;j<ch.length;j++){var test=line+ch[j];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[j];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
-    ft('✨ '+t(UI.daily_title),W/2,70,'bold 36px sans-serif','#a78bfa');
-    var dateStr=LANG==='en'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate()+', '+now.getFullYear():now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日';
-    ft(dateStr,W/2,115,'20px sans-serif','rgba(167,139,250,0.5)');
-    ctx.strokeStyle='rgba(167,139,250,0.3)';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(120,150,510,520,20);ctx.stroke();
-    ctx.fillStyle='rgba(26,18,48,0.8)';ctx.beginPath();ctx.roundRect(120,150,510,520,20);ctx.fill();
-    ft(todayCard.emoji,W/2,230,'60px sans-serif','#fff');ft(t(todayCard.name),W/2,290,'bold 32px sans-serif','#f5c542');ft(LANG==='zh'?todayCard.name.en:todayCard.name.zh,W/2,320,'18px sans-serif','#a8a3c0');
-    ft(t(todayCard.keywords).join('  ·  '),W/2,358,'18px sans-serif','#a78bfa');
-    var ey=wt(t(todayCard.msg),W/2,405,'22px sans-serif','#e2e0ef',440,34);
-    ft(t(todayCard.wish)+' 💫',W/2,ey+45,'italic 20px sans-serif','#f472b6');
-    var by=710;[{l:t(UI.love_energy),v:love,c:['#f472b6','#fb7185']},{l:t(UI.work_energy),v:work,c:['#818cf8','#a78bfa']},{l:t(UI.luck_energy),v:luck,c:['#34d399','#6ee7b7']}].forEach(function(b){ft(b.l,90,by,'18px sans-serif','rgba(226,224,239,0.6)','left');ft(b.v+'%',W-90,by,'18px sans-serif','#e2e0ef','right');ctx.fillStyle='rgba(255,255,255,0.08)';ctx.beginPath();ctx.roundRect(90,by+10,W-180,10,5);ctx.fill();var bg=ctx.createLinearGradient(90,0,90+(W-180)*b.v/100,0);bg.addColorStop(0,b.c[0]);bg.addColorStop(1,b.c[1]);ctx.fillStyle=bg;ctx.beginPath();ctx.roundRect(90,by+10,(W-180)*b.v/100,10,5);ctx.fill();by+=55});
-    var ay=by+15;ctx.fillStyle='rgba(167,139,250,0.06)';ctx.strokeStyle='rgba(167,139,250,0.15)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(70,ay,W-140,70,12);ctx.fill();ctx.stroke();ft('" '+t(todayAffirm),W/2,ay+42,'22px sans-serif','#c4b5fd');
-    var ly=ay+100;ft(todayColor.icon+' '+t(UI.lucky_color),W/2-200,ly,'16px sans-serif','rgba(226,224,239,0.4)');ft(t(todayColor.name),W/2-200,ly+28,'bold 20px sans-serif','#e2e0ef');ft('🔢 '+t(UI.lucky_num),W/2,ly,'16px sans-serif','rgba(226,224,239,0.4)');ft(String(todayNum),W/2,ly+28,'bold 20px sans-serif','#e2e0ef');ft(todayThing.icon+' '+t(UI.lucky_thing),W/2+200,ly,'16px sans-serif','rgba(226,224,239,0.4)');ft(t(todayThing.name),W/2+200,ly+28,'bold 20px sans-serif','#e2e0ef');
-    var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',120),qy=ly+80;ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(W/2-65,qy-5,130,130,8);ctx.fill();ctx.drawImage(qrc,W/2-60,qy,120,120);ft(t(UI.qr_hint),W/2,qy+148,'16px sans-serif','rgba(255,255,255,0.3)');
+    // Date
+    var dateStr=LANG==='en'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate()+', '+now.getFullYear():now.getFullYear()+'.'+(now.getMonth()+1)+'.'+now.getDate();
+    ft(dateStr,W/2,55,'16px sans-serif','rgba(167,139,250,0.4)');
+    // Divider line
+    ctx.strokeStyle='rgba(167,139,250,0.12)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2-60,72);ctx.lineTo(W/2+60,72);ctx.stroke();
+    // Emoji large
+    ft(todayCard.emoji,W/2,155,'72px sans-serif','#fff');
+    // Card name
+    ft(t(todayCard.name),W/2,220,'bold 34px sans-serif','#e8dff5');
+    ft(LANG==='zh'?todayCard.name.en:todayCard.name.zh,W/2,252,'16px sans-serif','rgba(168,163,192,0.6)');
+    // Keywords as a subtle line
+    ft(t(todayCard.keywords).join('  ·  '),W/2,295,'15px sans-serif','rgba(167,139,250,0.55)');
+    // Divider
+    ctx.strokeStyle='rgba(167,139,250,0.1)';ctx.beginPath();ctx.moveTo(100,320);ctx.lineTo(W-100,320);ctx.stroke();
+    // Message
+    var ey=wt(t(todayCard.msg),W/2,370,'20px sans-serif','rgba(226,224,239,0.85)',480,32);
+    // Wish
+    ft('"'+t(todayCard.wish)+'"',W/2,ey+50,'italic 17px sans-serif','rgba(244,114,182,0.7)');
+    // Divider
+    var dy=ey+85;
+    ctx.strokeStyle='rgba(167,139,250,0.1)';ctx.beginPath();ctx.moveTo(100,dy);ctx.lineTo(W-100,dy);ctx.stroke();
+    // Energy mini — 3 dots in a row
+    var ey2=dy+35;
+    var energies=[{e:'💕',v:love},{e:'💼',v:work},{e:'🍀',v:luck}];
+    var ex=W/2-120;
+    energies.forEach(function(en){
+      ft(en.e+' '+en.v+'%',ex,ey2,'15px sans-serif','rgba(226,224,239,0.45)');
+      ex+=120;
+    });
+    // Bottom area — QR + branding
+    var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',72);
+    var qy=H-120;
+    ctx.globalAlpha=0.9;ctx.drawImage(qrc,W/2-36,qy,72,72);ctx.globalAlpha=1;
+    ft(t(UI.qr_hint),W/2,qy+95,'12px sans-serif','rgba(255,255,255,0.2)');
     c.toBlob(function(blob){var f=new File([blob],'daily-tarot.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:t(UI.daily_title)}).catch(function(){})}else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='daily-tarot.png';a.click();URL.revokeObjectURL(a.href)}btn.textContent=t(UI.share_btn);btn.disabled=false},'image/png');
   }catch(e){alert(t(UI.share_fail)+e.message);btn.textContent=t(UI.share_btn);btn.disabled=false}
 }

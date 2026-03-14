@@ -135,47 +135,48 @@ function flipCard(){
 function shareCard(){
   var btn=document.querySelector('.share-btn');btn.textContent=t(UI.generating);btn.disabled=true;
   try{
-    var W=660,H=1000,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
+    var S=2,W=660*S,H=1000*S,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
+    ctx.scale(S,S);var w=660,h=1000;
     // Background
-    var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#16103a');g.addColorStop(0.5,'#0f0a1a');g.addColorStop(1,'#0a0615');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    var g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#16103a');g.addColorStop(0.5,'#0f0a1a');g.addColorStop(1,'#0a0615');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
     // Stars
-    for(var i=0;i<50;i++){ctx.fillStyle='rgba(255,255,255,'+(0.15+Math.random()*0.4)+')';var sz=Math.random()*1.8+0.3;ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,sz,0,Math.PI*2);ctx.fill()}
-    function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,W-100)}
+    for(var i=0;i<50;i++){ctx.fillStyle='rgba(255,255,255,'+(0.15+Math.random()*0.4)+')';var sz=Math.random()*1.8+0.3;ctx.beginPath();ctx.arc(Math.random()*w,Math.random()*h,sz,0,Math.PI*2);ctx.fill()}
+    function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,w-100)}
     function wt(tx,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=tx.split(''),line='',cy=y;for(var j=0;j<ch.length;j++){var test=line+ch[j];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[j];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
     // Date
     var dateStr=LANG==='en'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate()+', '+now.getFullYear():now.getFullYear()+'.'+(now.getMonth()+1)+'.'+now.getDate();
-    ft(dateStr,W/2,55,'16px sans-serif','rgba(167,139,250,0.4)');
+    ft(dateStr,w/2,55,'16px sans-serif','rgba(167,139,250,0.4)');
     // Divider line
-    ctx.strokeStyle='rgba(167,139,250,0.12)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2-60,72);ctx.lineTo(W/2+60,72);ctx.stroke();
+    ctx.strokeStyle='rgba(167,139,250,0.12)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(w/2-60,72);ctx.lineTo(w/2+60,72);ctx.stroke();
     // Emoji large
-    ft(todayCard.emoji,W/2,155,'72px sans-serif','#fff');
+    ft(todayCard.emoji,w/2,155,'72px sans-serif','#fff');
     // Card name
-    ft(t(todayCard.name),W/2,220,'bold 34px sans-serif','#e8dff5');
-    ft(LANG==='zh'?todayCard.name.en:todayCard.name.zh,W/2,252,'16px sans-serif','rgba(168,163,192,0.6)');
+    ft(t(todayCard.name),w/2,220,'bold 34px sans-serif','#e8dff5');
+    ft(LANG==='zh'?todayCard.name.en:todayCard.name.zh,w/2,252,'16px sans-serif','rgba(168,163,192,0.6)');
     // Keywords as a subtle line
-    ft(t(todayCard.keywords).join('  ·  '),W/2,295,'15px sans-serif','rgba(167,139,250,0.55)');
+    ft(t(todayCard.keywords).join('  ·  '),w/2,295,'15px sans-serif','rgba(167,139,250,0.55)');
     // Divider
-    ctx.strokeStyle='rgba(167,139,250,0.1)';ctx.beginPath();ctx.moveTo(100,320);ctx.lineTo(W-100,320);ctx.stroke();
+    ctx.strokeStyle='rgba(167,139,250,0.1)';ctx.beginPath();ctx.moveTo(100,320);ctx.lineTo(w-100,320);ctx.stroke();
     // Message
-    var ey=wt(t(todayCard.msg),W/2,370,'20px sans-serif','rgba(226,224,239,0.85)',480,32);
+    var ey=wt(t(todayCard.msg),w/2,370,'20px sans-serif','rgba(226,224,239,0.85)',480,32);
     // Wish
-    ft('"'+t(todayCard.wish)+'"',W/2,ey+50,'italic 17px sans-serif','rgba(244,114,182,0.7)');
+    ft('"'+t(todayCard.wish)+'"',w/2,ey+50,'italic 17px sans-serif','rgba(244,114,182,0.7)');
     // Divider
     var dy=ey+85;
-    ctx.strokeStyle='rgba(167,139,250,0.1)';ctx.beginPath();ctx.moveTo(100,dy);ctx.lineTo(W-100,dy);ctx.stroke();
+    ctx.strokeStyle='rgba(167,139,250,0.1)';ctx.beginPath();ctx.moveTo(100,dy);ctx.lineTo(w-100,dy);ctx.stroke();
     // Energy mini — 3 dots in a row
     var ey2=dy+35;
     var energies=[{e:'💕',v:love},{e:'💼',v:work},{e:'🍀',v:luck}];
-    var ex=W/2-120;
+    var ex=w/2-120;
     energies.forEach(function(en){
       ft(en.e+' '+en.v+'%',ex,ey2,'15px sans-serif','rgba(226,224,239,0.45)');
       ex+=120;
     });
     // Bottom area — QR + branding
-    var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',72);
-    var qy=H-120;
-    ctx.globalAlpha=0.9;ctx.drawImage(qrc,W/2-36,qy,72,72);ctx.globalAlpha=1;
-    ft(t(UI.qr_hint),W/2,qy+95,'12px sans-serif','rgba(255,255,255,0.2)');
+    var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',144);
+    var qy=h-120;
+    ctx.globalAlpha=0.9;ctx.drawImage(qrc,w/2-36,qy,72,72);ctx.globalAlpha=1;
+    ft(t(UI.qr_hint),w/2,qy+95,'12px sans-serif','rgba(255,255,255,0.2)');
     c.toBlob(function(blob){var f=new File([blob],'daily-tarot.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:t(UI.daily_title)}).catch(function(){})}else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='daily-tarot.png';a.click();URL.revokeObjectURL(a.href)}btn.textContent=t(UI.share_btn);btn.disabled=false},'image/png');
   }catch(e){alert(t(UI.share_fail)+e.message);btn.textContent=t(UI.share_btn);btn.disabled=false}
 }

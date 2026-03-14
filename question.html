@@ -118,7 +118,7 @@ function flipCard(){
   setTimeout(function(){var ci=document.getElementById('cardInner');ci.classList.add('flipping');ci.addEventListener('animationend',function(){ci.classList.remove('flipping');ci.classList.add('flipped')},{once:true})},1000);
   setTimeout(function(){document.getElementById('result').classList.add('show')},1900);
 }
-function askAgain(){flipped=false;currentCard=null;currentQuestion='';document.getElementById('cardInner').classList.remove('flipped');document.getElementById('result').classList.remove('show');var si=document.getElementById('shareImg');if(si)si.remove();var st=document.getElementById('shareTip');if(st)st.remove();document.getElementById('questionInput').value='';document.getElementById('questionInput').focus();window.scrollTo({top:0,behavior:'smooth'})}
+function askAgain(){flipped=false;currentCard=null;currentQuestion='';var ci=document.getElementById('cardInner');ci.classList.remove('flipped','flipping');ci.style.transition='none';ci.style.transform='rotateY(0deg) scale(1)';ci.offsetHeight;ci.style.transition='';ci.style.transform='';document.querySelector('.card-front').classList.remove('activating');document.getElementById('result').classList.remove('show');var si=document.getElementById('shareImg');if(si)si.remove();var st=document.getElementById('shareTip');if(st)st.remove();document.getElementById('questionInput').value='';document.getElementById('questionInput').focus();window.scrollTo({top:0,behavior:'smooth'})}
 
 function shareCard(){
   if(!currentCard)return;var btn=document.querySelector('.share-btn');btn.textContent=t(UI.generating);btn.disabled=true;

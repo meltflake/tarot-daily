@@ -123,7 +123,7 @@ function shareCard(){
     ft(t(currentCard.keywords).join('  ·  '),W/2,365,'16px sans-serif','#a78bfa');
     var msg=t(currentCard.msg);var qr=Q_READINGS[currentCard.name.zh];if(qr&&qr[currentTopic])msg=t(qr[currentTopic]);
     var ey=wt(msg,W/2,410,'22px sans-serif','#e2e0ef',440,34);ft(t(currentCard.wish)+' 💫',W/2,ey+40,'italic 18px sans-serif','#f472b6');
-    var qrc=generateQRCanvas('https://tarot.1yong.com',100),qy=740;ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(W/2-55,qy-5,110,110,8);ctx.fill();ctx.drawImage(qrc,W/2-50,qy,100,100);ft(t(UI.qr_hint_q),W/2,qy+128,'15px sans-serif','rgba(255,255,255,0.3)');
+    var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',100),qy=740;ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(W/2-55,qy-5,110,110,8);ctx.fill();ctx.drawImage(qrc,W/2-50,qy,100,100);ft(t(UI.qr_hint_q),W/2,qy+128,'15px sans-serif','rgba(255,255,255,0.3)');
     c.toBlob(function(blob){var f=new File([blob],'tarot-question.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:t(UI.question_title)}).catch(function(){})}else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tarot-question.png';a.click();URL.revokeObjectURL(a.href)}btn.textContent=t(UI.share_btn);btn.disabled=false},'image/png');
   }catch(e){alert(t(UI.share_fail)+e.message);btn.textContent=t(UI.share_btn);btn.disabled=false}
 }

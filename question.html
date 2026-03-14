@@ -126,8 +126,8 @@ function shareCard(){
     ctx.strokeStyle='rgba(235,230,248,1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(180,cy);ctx.lineTo(w-180,cy);ctx.stroke();cy+=28;
     var ey=wt(rmsg,w/2,cy,'18px sans-serif','#3a3058',440,30);cy=ey+35;
     var pw=Math.min(400,w-80);
-    ctx.fillStyle='rgba(246,243,253,1)';ctx.beginPath();ctx.roundRect(w/2-pw/2,cy-12,pw,32,16);ctx.fill();
-    ft('✨ '+t(currentCard.wish),w/2,cy+6,'15px sans-serif','rgba(140,125,170,1)');
+    ctx.fillStyle='rgba(246,243,253,1)';ctx.beginPath();ctx.roundRect(w/2-pw/2,cy-16,pw,32,16);ctx.fill();
+    ctx.textBaseline='middle';ft('✨ '+t(currentCard.wish),w/2,cy,'15px sans-serif','rgba(140,125,170,1)');ctx.textBaseline='alphabetic';
     // QR at bottom
     var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',96);
     var qy=h-80;ctx.globalAlpha=0.92;ctx.drawImage(qrc,w/2-24,qy,48,48);ctx.globalAlpha=1;

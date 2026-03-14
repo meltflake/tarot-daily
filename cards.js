@@ -201,6 +201,31 @@ function generateQRCanvas(text,size){
   return c;
 }
 
+// ===== SHARE MODAL =====
+function showShareModal(dataUrl){
+  var old=document.getElementById('shareModal');if(old)old.remove();
+  var m=document.createElement('div');m.id='shareModal';
+  m.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.75);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:modalIn .3s ease;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)';
+  var style=document.createElement('style');
+  style.textContent='@keyframes modalIn{from{opacity:0}to{opacity:1}}@keyframes imgIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}';
+  m.appendChild(style);
+  var img=document.createElement('img');img.src=dataUrl;
+  img.style.cssText='max-width:78%;max-height:68vh;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.4);animation:imgIn .4s ease .1s both';
+  m.appendChild(img);
+  var tip=document.createElement('div');
+  tip.textContent=LANG==='zh'?'👆 长按图片保存到相册':'👆 Long press image to save';
+  tip.style.cssText='color:rgba(255,255,255,.6);font-size:.82rem;margin-top:1rem;font-family:inherit';
+  m.appendChild(tip);
+  var close=document.createElement('div');
+  close.textContent='✕';
+  close.style.cssText='color:rgba(255,255,255,.5);font-size:1.5rem;margin-top:1.2rem;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(255,255,255,.2);cursor:pointer';
+  close.onclick=function(){m.style.opacity='0';m.style.transition='opacity .25s';setTimeout(function(){m.remove()},250)};
+  m.appendChild(close);
+  // tap background to close
+  m.addEventListener('click',function(e){if(e.target===m){close.onclick()}});
+  document.body.appendChild(m);
+}
+
 if(typeof CanvasRenderingContext2D!=='undefined'&&!CanvasRenderingContext2D.prototype.roundRect){
   CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
     if(typeof r==='number')r=[r,r,r,r];this.moveTo(x+r[0],y);this.lineTo(x+w-r[1],y);this.arcTo(x+w,y,x+w,y+r[1],r[1]);

@@ -146,12 +146,7 @@ function shareCard(){
     var qy=h-105;ctx.globalAlpha=0.92;ctx.drawImage(qrc,w/2-24,qy,48,48);ctx.globalAlpha=1;
     var dateStr=LANG==='en'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate()+', '+now.getFullYear():now.getFullYear()+'.'+(now.getMonth()+1)+'.'+now.getDate();
     ft(dateStr,w/2,h-40,'11px sans-serif','#d7d7d7');
-    var dataUrl=c.toDataURL('image/png');
-    var shareImg=document.getElementById('shareImg');
-    if(!shareImg){shareImg=document.createElement('img');shareImg.id='shareImg';shareImg.style.cssText='max-width:90%;border-radius:8px;margin:1rem auto;display:block;box-shadow:0 2px 15px rgba(100,80,160,.1)';document.querySelector('.result').appendChild(shareImg);
-      var tip=document.createElement('div');tip.id='shareTip';tip.style.cssText='font-size:.75rem;color:#a098b8;margin-top:.5rem;text-align:center';document.querySelector('.result').appendChild(tip)}
-    shareImg.src=dataUrl;
-    document.getElementById('shareTip').textContent=LANG==='zh'?'👆 长按图片保存到相册':'👆 Long press to save';
+    showShareModal(c.toDataURL('image/png'));
     btn.textContent=t(UI.share_btn);btn.disabled=false;
   }catch(e){alert(t(UI.share_fail)+e.message);btn.textContent=t(UI.share_btn);btn.disabled=false}
 }

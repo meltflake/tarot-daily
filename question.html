@@ -110,24 +110,28 @@ function shareCard(){
     function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,w-100)}
     function wt(tx,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=tx.split(''),line='',cy=y;for(var j=0;j<ch.length;j++){var test=line+ch[j];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[j];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
     var qText=currentQuestion.length>20?currentQuestion.slice(0,20)+'…':currentQuestion;
-    // --- compact layout ---
-    var cy=90;
-    ft('💭 '+qText,w/2,cy,'14px sans-serif','rgba(195,190,215,1)');cy+=25;
-    ft(t(TOPIC_LABELS[currentTopic]),w/2,cy,'13px sans-serif','rgba(210,205,225,1)');cy+=55;
-    ft(currentCard.emoji,w/2,cy,'48px sans-serif','#000');cy+=70;
-    ft(t(currentCard.name),w/2,cy,'bold 32px sans-serif','#2a2a48');cy+=32;
-    ft(LANG==='zh'?currentCard.name.en:currentCard.name.zh,w/2,cy,'13px sans-serif','rgba(175,168,198,1)');cy+=30;
-    ft(t(currentCard.keywords).join('  ·  '),w/2,cy,'12px sans-serif','rgba(195,190,215,1)');cy+=22;
-    ctx.strokeStyle='rgba(235,230,248,1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(180,cy);ctx.lineTo(w-180,cy);ctx.stroke();cy+=32;
+    // --- measure content height ---
     var rmsg=t(currentCard.msg);var qr=Q_READINGS[currentCard.name.zh];if(qr&&qr[currentTopic])rmsg=t(qr[currentTopic]);
+    ctx.font='18px sans-serif';var msgLines=[];var ml='';var mch=rmsg.split('');for(var mi=0;mi<mch.length;mi++){var mt=ml+mch[mi];if(ctx.measureText(mt).width>440&&ml){msgLines.push(ml);ml=mch[mi]}else ml=mt}if(ml)msgLines.push(ml);
+    var contentH=14+22+48+60+32+22+13+22+22+(msgLines.length*30)+35+32;
+    var availH=h-80;
+    var cy=Math.max(40,Math.floor((availH-contentH)/2));
+    // --- draw centered ---
+    ft('💭 '+qText,w/2,cy,'14px sans-serif','rgba(195,190,215,1)');cy+=22;
+    ft(t(TOPIC_LABELS[currentTopic]),w/2,cy,'13px sans-serif','rgba(210,205,225,1)');cy+=50;
+    ft(currentCard.emoji,w/2,cy,'48px sans-serif','#000');cy+=60;
+    ft(t(currentCard.name),w/2,cy,'bold 32px sans-serif','#2a2a48');cy+=32;
+    ft(LANG==='zh'?currentCard.name.en:currentCard.name.zh,w/2,cy,'13px sans-serif','rgba(175,168,198,1)');cy+=26;
+    ft(t(currentCard.keywords).join('  ·  '),w/2,cy,'12px sans-serif','rgba(195,190,215,1)');cy+=22;
+    ctx.strokeStyle='rgba(235,230,248,1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(180,cy);ctx.lineTo(w-180,cy);ctx.stroke();cy+=28;
     var ey=wt(rmsg,w/2,cy,'18px sans-serif','#3a3058',440,30);cy=ey+35;
     var pw=Math.min(400,w-80);
     ctx.fillStyle='rgba(246,243,253,1)';ctx.beginPath();ctx.roundRect(w/2-pw/2,cy-12,pw,32,16);ctx.fill();
     ft('✨ '+t(currentCard.wish),w/2,cy+6,'15px sans-serif','rgba(140,125,170,1)');
     // QR at bottom
     var qrc=generateQRCanvas('https://meltflake.com/tarot-daily',96);
-    var qy=h-105;ctx.globalAlpha=0.92;ctx.drawImage(qrc,w/2-24,qy,48,48);ctx.globalAlpha=1;
-    ft(LANG==='zh'?'长按识别 · 问问你的心事':'Scan · Ask your heart',w/2,qy+68,'11px sans-serif','rgba(218,214,232,1)');
+    var qy=h-80;ctx.globalAlpha=0.92;ctx.drawImage(qrc,w/2-24,qy,48,48);ctx.globalAlpha=1;
+    ft(LANG==='zh'?'长按识别 · 问问你的心事':'Scan · Ask your heart',w/2,qy+62,'11px sans-serif','rgba(218,214,232,1)');
     showShareModal(c.toDataURL('image/png'));
     btn.textContent=t(UI.share_btn);btn.disabled=false;
   }catch(e){alert(t(UI.share_fail)+e.message);btn.textContent=t(UI.share_btn);btn.disabled=false}

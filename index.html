@@ -360,12 +360,11 @@ var currentQuestion = '';
 
 function flipCard(){
   if(flipped){
-    // Already flipped — if question changed, reset and re-flip
-    const q = document.getElementById('questionInput').value.trim();
-    if(q && q !== currentQuestion){
-      resetCard();
-      setTimeout(flipCard, 100);
-    }
+    // Tap again → reset to front, clear question, let user re-enter
+    resetCard();
+    document.getElementById('questionInput').value = '';
+    document.getElementById('questionInput').focus();
+    window.scrollTo({top:0,behavior:'smooth'});
     return;
   }
 

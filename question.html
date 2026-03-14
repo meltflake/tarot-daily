@@ -104,7 +104,7 @@ function askAgain(){flipped=false;currentCard=null;currentQuestion='';document.g
 function shareCard(){
   if(!currentCard)return;var btn=document.querySelector('.share-btn');btn.textContent=t(UI.generating);btn.disabled=true;
   try{
-    var S=2,w=660,h=1000,W=w*S,H=h*S,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
+    var S=2,w=660,h=780,W=w*S,H=h*S,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
     ctx.scale(S,S);
     ctx.fillStyle='#fdfcff';ctx.fillRect(0,0,w,h);
     function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,w-100)}

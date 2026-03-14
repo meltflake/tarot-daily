@@ -36,24 +36,33 @@ h1{font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,var(--gold
 <body>
 <div class="stars" id="stars"></div>
 <div class="container">
-  <h1>✨ 塔罗能量站</h1>
-  <div class="subtitle">用正能量开启每一天</div>
+  <h1 id="siteTitle"></h1>
+  <div class="subtitle" id="siteSub"></div>
   <div class="cards">
     <a class="entry-card" href="daily.html">
       <div class="icon">🌅</div>
-      <div class="title">每日一签</div>
-      <div class="desc">每天一张专属塔罗牌<br>爱情·事业·幸运 能量全掌握</div>
+      <div class="title" id="dailyTitle"></div>
+      <div class="desc" id="dailyDesc"></div>
     </a>
     <a class="entry-card" href="question.html">
       <div class="icon">🔮</div>
-      <div class="title">心事求签</div>
-      <div class="desc">写下你的问题，抽一张牌<br>塔罗为你指引方向</div>
+      <div class="title" id="questionTitle"></div>
+      <div class="desc" id="questionDesc"></div>
     </a>
   </div>
-  <div class="footer">✨ 塔罗能量站 · 每张牌都是正能量</div>
+  <div class="footer" id="footerText"></div>
 </div>
 <script>
-(function(){var e=document.getElementById('stars');for(var i=0;i<60;i++){var s=document.createElement('div');s.className='star';var z=Math.random()*2.5+1;s.style.cssText='width:'+z+'px;height:'+z+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;--d:'+(2+Math.random()*4)+'s;--delay:'+Math.random()*3+'s';e.appendChild(s)}})();
+<script src="cards.js"></script>
+<script>
+createStars();
+document.getElementById('siteTitle').textContent = t(UI.site_name);
+document.getElementById('siteSub').textContent = t(UI.site_sub);
+document.getElementById('dailyTitle').textContent = t(UI.daily_title);
+document.getElementById('dailyDesc').innerHTML = t(UI.daily_desc);
+document.getElementById('questionTitle').textContent = t(UI.question_title);
+document.getElementById('questionDesc').innerHTML = t(UI.question_desc);
+document.getElementById('footerText').textContent = t(UI.footer_home);
 </script>
 </body>
 </html>

@@ -63,9 +63,9 @@ h1{font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,var(--gold
 <body>
 <div class="stars" id="stars"></div>
 <div class="container">
-  <a class="back-link" href="index.html">← 返回</a>
-  <h1>🌅 每日一签</h1>
-  <div class="subtitle">今天的宇宙想对你说什么？</div>
+  <a class="back-link" href="index.html" id="backLink">← 返回</a>
+  <h1 id="pageTitle">🌅 每日一签</h1>
+  <div class="subtitle" id="pageSub">今天的宇宙想对你说什么？</div>
   <div class="date" id="dateDisplay"></div>
 
   <div class="card-container" id="cardContainer" onclick="flipCard()">
@@ -79,14 +79,14 @@ h1{font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,var(--gold
   </div>
 
   <div class="result" id="result">
-    <div class="energy-bar"><div class="energy-label"><span>💕 爱情能量</span><span id="lovePct"></span></div><div class="energy-track"><div class="energy-fill love" id="loveFill"></div></div></div>
-    <div class="energy-bar"><div class="energy-label"><span>💼 事业能量</span><span id="workPct"></span></div><div class="energy-track"><div class="energy-fill work" id="workFill"></div></div></div>
-    <div class="energy-bar"><div class="energy-label"><span>🍀 幸运能量</span><span id="luckPct"></span></div><div class="energy-track"><div class="energy-fill luck" id="luckFill"></div></div></div>
+    <div class="energy-bar"><div class="energy-label"><span id="loveLabel">💕 爱情能量</span><span id="lovePct"></span></div><div class="energy-track"><div class="energy-fill love" id="loveFill"></div></div></div>
+    <div class="energy-bar"><div class="energy-label"><span id="workLabel">💼 事业能量</span><span id="workPct"></span></div><div class="energy-track"><div class="energy-fill work" id="workFill"></div></div></div>
+    <div class="energy-bar"><div class="energy-label"><span id="luckLabel">🍀 幸运能量</span><span id="luckPct"></span></div><div class="energy-track"><div class="energy-fill luck" id="luckFill"></div></div></div>
     <div class="affirmation" id="affirmation"></div>
     <div class="lucky-items">
-      <div class="lucky-item"><div class="li-icon" id="luckyColorIcon">🎨</div><div class="li-label">幸运色</div><div class="li-value" id="luckyColor"></div></div>
-      <div class="lucky-item"><div class="li-icon">🔢</div><div class="li-label">幸运数字</div><div class="li-value" id="luckyNum"></div></div>
-      <div class="lucky-item"><div class="li-icon" id="luckyThingIcon">🌟</div><div class="li-label">幸运物</div><div class="li-value" id="luckyThing"></div></div>
+      <div class="lucky-item"><div class="li-icon" id="luckyColorIcon">🎨</div><div class="li-label" id="colorLabel">幸运色</div><div class="li-value" id="luckyColor"></div></div>
+      <div class="lucky-item"><div class="li-icon">🔢</div><div class="li-label" id="numLabel">幸运数字</div><div class="li-value" id="luckyNum"></div></div>
+      <div class="lucky-item"><div class="li-icon" id="luckyThingIcon">🌟</div><div class="li-label" id="thingLabel">幸运物</div><div class="li-value" id="luckyThing"></div></div>
     </div>
     <button class="share-btn" onclick="shareCard()">📸 保存分享</button>
   </div>
@@ -108,14 +108,33 @@ var luck = Math.floor(rng() * 25) + 75;
 var now = new Date();
 var weekdays = ['日','一','二','三','四','五','六'];
 
-document.getElementById('dateDisplay').textContent = now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 星期'+weekdays[now.getDay()];
+if(LANG==='en'){
+  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('dateDisplay').textContent = days[now.getDay()]+', '+months[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear();
+} else {
+  document.getElementById('dateDisplay').textContent = now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 星期'+weekdays[now.getDay()];
+}
 createStars();
+// i18n labels
+document.getElementById('backLink').textContent = t(UI.back);
+document.getElementById('pageTitle').textContent = t(UI.daily_h1);
+document.getElementById('pageSub').textContent = t(UI.daily_sub);
+document.querySelector('.card-front .tap-hint').textContent = t(UI.tap_hint);
+document.getElementById('loveLabel').textContent = t(UI.love_energy);
+document.getElementById('workLabel').textContent = t(UI.work_energy);
+document.getElementById('luckLabel').textContent = t(UI.luck_energy);
+document.getElementById('colorLabel').textContent = t(UI.lucky_color);
+document.getElementById('numLabel').textContent = t(UI.lucky_num);
+document.getElementById('thingLabel').textContent = t(UI.lucky_thing);
+document.querySelector('.share-btn').textContent = t(UI.share_btn);
+document.querySelector('.footer').textContent = t(UI.footer_daily);
 
 var flipped = false;
 function flipCard(){
   if(flipped) return;
   flipped = true;
-  document.getElementById('cardBack').innerHTML = '<div class="card-emoji">'+todayCard.emoji+'</div><div class="card-name">'+todayCard.name+'</div><div class="card-name-en">'+todayCard.en+'</div><div class="card-keyword">'+todayCard.keywords.map(function(k){return '<span class="kw">'+k+'</span>'}).join('')+'</div><div class="card-msg">'+todayCard.msg+'</div><div class="card-wish">'+todayCard.wish+' 💫</div>';
+  document.getElementById('cardBack').innerHTML = '<div class="card-emoji">'+todayCard.emoji+'</div><div class="card-name">'+t(todayCard.name)+'</div><div class="card-name-en">'+(LANG==='zh'?todayCard.name.en:todayCard.name.zh)+'</div><div class="card-keyword">'+t(todayCard.keywords).map(function(k){return '<span class="kw">'+k+'</span>'}).join('')+'</div><div class="card-msg">'+t(todayCard.msg)+'</div><div class="card-wish">'+t(todayCard.wish)+' 💫</div>';
   document.getElementById('cardInner').classList.add('flipped');
   setTimeout(function(){
     document.getElementById('result').classList.add('show');
@@ -124,11 +143,11 @@ function flipCard(){
       document.getElementById('workFill').style.width=work+'%'; document.getElementById('workPct').textContent=work+'%';
       document.getElementById('luckFill').style.width=luck+'%'; document.getElementById('luckPct').textContent=luck+'%';
     },200);
-    document.getElementById('affirmation').textContent=todayAffirm;
-    document.getElementById('luckyColor').textContent=todayColor.name;
+    document.getElementById('affirmation').textContent=t(todayAffirm);
+    document.getElementById('luckyColor').textContent=t(todayColor.name);
     document.getElementById('luckyColorIcon').textContent=todayColor.icon;
     document.getElementById('luckyNum').textContent=todayNum;
-    document.getElementById('luckyThing').textContent=todayThing.name;
+    document.getElementById('luckyThing').textContent=t(todayThing.name);
     document.getElementById('luckyThingIcon').textContent=todayThing.icon;
   },900);
 }

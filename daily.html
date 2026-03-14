@@ -137,7 +137,7 @@ function shareCard(){
     function wt(tx,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=tx.split(''),line='',cy=y;for(var j=0;j<ch.length;j++){var test=line+ch[j];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[j];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
     var dateStr=LANG==='en'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate()+', '+now.getFullYear():now.getFullYear()+'.'+(now.getMonth()+1)+'.'+now.getDate();
     // --- compact layout ---
-    var cy=50;
+    var cy=90;
     ft(dateStr,w/2,cy,'12px sans-serif','rgba(195,190,215,1)');cy+=22;
     ft('· · ·',w/2,cy,'14px sans-serif','rgba(210,205,225,1)');cy+=55;
     ft(todayCard.emoji,w/2,cy,'48px sans-serif','#000');cy+=70;

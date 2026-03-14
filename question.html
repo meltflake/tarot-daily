@@ -111,7 +111,7 @@ function shareCard(){
     function wt(tx,x,y,f,co,mw,lh){ctx.font=f;ctx.fillStyle=co;ctx.textAlign='center';var ch=tx.split(''),line='',cy=y;for(var j=0;j<ch.length;j++){var test=line+ch[j];if(ctx.measureText(test).width>mw&&line){ctx.fillText(line,x,cy);line=ch[j];cy+=lh}else line=test}if(line)ctx.fillText(line,x,cy);return cy}
     var qText=currentQuestion.length>20?currentQuestion.slice(0,20)+'…':currentQuestion;
     // --- compact layout ---
-    var cy=50;
+    var cy=90;
     ft('💭 '+qText,w/2,cy,'14px sans-serif','rgba(195,190,215,1)');cy+=25;
     ft(t(TOPIC_LABELS[currentTopic]),w/2,cy,'13px sans-serif','rgba(210,205,225,1)');cy+=55;
     ft(currentCard.emoji,w/2,cy,'48px sans-serif','#000');cy+=70;

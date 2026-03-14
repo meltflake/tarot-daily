@@ -97,10 +97,7 @@ h1{font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,var(--gold
 .reset-btn{background:none;border:1px solid rgba(255,255,255,.15);color:var(--text-soft);padding:.5rem 1.5rem;border-radius:20px;font-size:.78rem;cursor:pointer;margin-top:.8rem;font-family:inherit}
 .reset-btn:hover{border-color:var(--purple);color:var(--purple)}
 
-.mode-tabs{display:flex;gap:.5rem;justify-content:center;margin-bottom:1.2rem}
-.mode-tab{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-soft);padding:.5rem 1.2rem;border-radius:20px;font-size:.85rem;cursor:pointer;font-family:inherit;transition:all .3s}
-.mode-tab.active{background:linear-gradient(135deg,rgba(167,139,250,.25),rgba(244,114,182,.2));border-color:var(--purple);color:#fff}
-.question-box{margin-bottom:1.2rem;animation:fadeUp .4s ease}
+.question-box{margin-bottom:1.2rem}
 .question-box input{width:100%;padding:.7rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;color:var(--text);font-size:.9rem;font-family:inherit;outline:none;text-align:center}
 .question-box input:focus{border-color:var(--purple);box-shadow:0 0 15px rgba(167,139,250,.15)}
 .question-box input::placeholder{color:var(--text-soft)}
@@ -116,13 +113,9 @@ h1{font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,var(--gold
   <div class="subtitle">今天的宇宙想对你说什么？</div>
   <div class="date" id="dateDisplay"></div>
 
-  <div class="mode-tabs">
-    <button class="mode-tab active" onclick="switchMode('daily')">🌅 每日一签</button>
-    <button class="mode-tab" onclick="switchMode('question')">🔮 心事求签</button>
-  </div>
-  <div class="question-box" id="questionBox" style="display:none">
-    <input type="text" id="questionInput" placeholder="写下你的心事或问题..." maxlength="50">
-    <div class="question-hint">比如：我该不该换工作？这段感情值得继续吗？</div>
+  <div class="question-box" id="questionBox">
+    <input type="text" id="questionInput" placeholder="💭 有心事？写下来抽专属签..." maxlength="50">
+    <div class="question-hint">留空直接翻牌 = 每日一签 ✨</div>
   </div>
 
   <div class="card-container" id="cardContainer" onclick="flipCard()">
@@ -362,48 +355,22 @@ document.getElementById('dateDisplay').textContent =
 
 // Flip
 var flipped = false;
-var currentMode = 'daily'; // 'daily' or 'question'
-var currentCard = todayCard; // card being displayed
+var currentCard = todayCard;
 var currentQuestion = '';
-
-function switchMode(mode){
-  currentMode = mode;
-  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelector(`.mode-tab[onclick*="${mode}"]`).classList.add('active');
-  document.getElementById('questionBox').style.display = mode==='question' ? 'block' : 'none';
-  // Reset card for new mode
-  resetCard();
-  if(mode==='daily'){
-    document.querySelector('.card-front .symbol').textContent = '🔮';
-    document.querySelector('.card-front .tap-hint').textContent = '✨ 轻触翻牌 ✨';
-  } else {
-    document.querySelector('.card-front .symbol').textContent = '🔮';
-    document.querySelector('.card-front .tap-hint').textContent = '✨ 心中默念问题，然后翻牌 ✨';
-  }
-}
 
 function flipCard(){
   if(flipped) return;
 
-  if(currentMode === 'question'){
-    // Pick a random card based on question text (different from daily)
-    const q = document.getElementById('questionInput').value.trim();
-    if(!q){
-      document.getElementById('questionInput').style.borderColor = '#f472b6';
-      document.getElementById('questionInput').placeholder = '请先写下你的问题哦 💭';
-      setTimeout(()=>{
-        document.getElementById('questionInput').style.borderColor = '';
-        document.getElementById('questionInput').placeholder = '写下你的心事或问题...';
-      }, 2000);
-      return;
-    }
+  const q = document.getElementById('questionInput').value.trim();
+  if(q){
+    // Question mode: pick card based on question
     currentQuestion = q;
-    // Generate card based on question hash (different from daily card)
     let hash = 0;
     for(let i=0;i<q.length;i++) hash = ((hash<<5)-hash) + q.charCodeAt(i) + seed;
     hash = Math.abs(hash);
     currentCard = CARDS[hash % CARDS.length];
   } else {
+    // Daily mode
     currentCard = todayCard;
     currentQuestion = '';
   }

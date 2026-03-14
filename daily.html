@@ -132,7 +132,7 @@ function flipCard(){
 function shareCard(){
   var btn=document.querySelector('.share-btn');btn.textContent=t(UI.generating);btn.disabled=true;
   try{
-    var S=2,w=660,h=880,W=w*S,H=h*S,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
+    var S=2,w=660,h=1000,W=w*S,H=h*S,c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
     ctx.scale(S,S);
     ctx.fillStyle='#fdfcff';ctx.fillRect(0,0,w,h);
     function ft(tx,x,y,f,co,a){ctx.font=f;ctx.fillStyle=co;ctx.textAlign=a||'center';ctx.fillText(tx,x,y,w-100)}
@@ -140,17 +140,17 @@ function shareCard(){
     var dateStr=LANG==='en'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getMonth()]+' '+now.getDate()+', '+now.getFullYear():now.getFullYear()+'.'+(now.getMonth()+1)+'.'+now.getDate();
     // --- measure content height first ---
     ctx.font='18px sans-serif';var msgText=t(todayCard.msg);var msgLines=[];var ml='';var mch=msgText.split('');for(var mi=0;mi<mch.length;mi++){var mt=ml+mch[mi];if(ctx.measureText(mt).width>440&&ml){msgLines.push(ml);ml=mch[mi]}else ml=mt}if(ml)msgLines.push(ml);
-    var contentH=12+65+48+75+38+30+16+28+28+(msgLines.length*36)+42+32+48+12+20;
-    var availH=h-80;
-    var cy=Math.max(40,Math.floor((availH-contentH)/2));
-    // --- draw centered, relaxed spacing ---
-    ft(dateStr,w/2,cy,'12px sans-serif','rgba(195,190,215,1)');cy+=65;
-    ft(todayCard.emoji,w/2,cy,'48px sans-serif','#000');cy+=75;
-    ft(t(todayCard.name),w/2,cy,'bold 32px sans-serif','#2a2a48');cy+=38;
-    ft(LANG==='zh'?todayCard.name.en:todayCard.name.zh,w/2,cy,'13px sans-serif','rgba(175,168,198,1)');cy+=30;
-    ft(t(todayCard.keywords).join('  ·  '),w/2,cy,'12px sans-serif','rgba(195,190,215,1)');cy+=28;
-    ctx.strokeStyle='rgba(235,230,248,1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(180,cy);ctx.lineTo(w-180,cy);ctx.stroke();cy+=35;
-    var ey=wt(t(todayCard.msg),w/2,cy,'18px sans-serif','#3a3058',440,36);cy=ey+42;
+    var contentH=12+80+48+90+44+38+20+34+40+(msgLines.length*42)+50+32+55+12+20;
+    var availH=h-90;
+    var cy=Math.max(50,Math.floor((availH-contentH)/2));
+    // --- draw centered, generous spacing ---
+    ft(dateStr,w/2,cy,'12px sans-serif','rgba(195,190,215,1)');cy+=80;
+    ft(todayCard.emoji,w/2,cy,'48px sans-serif','#000');cy+=90;
+    ft(t(todayCard.name),w/2,cy,'bold 32px sans-serif','#2a2a48');cy+=44;
+    ft(LANG==='zh'?todayCard.name.en:todayCard.name.zh,w/2,cy,'13px sans-serif','rgba(175,168,198,1)');cy+=38;
+    ft(t(todayCard.keywords).join('  ·  '),w/2,cy,'12px sans-serif','rgba(195,190,215,1)');cy+=34;
+    ctx.strokeStyle='rgba(235,230,248,1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(180,cy);ctx.lineTo(w-180,cy);ctx.stroke();cy+=40;
+    var ey=wt(t(todayCard.msg),w/2,cy,'18px sans-serif','#3a3058',440,42);cy=ey+50;
     var pw=Math.min(400,w-80);
     ctx.fillStyle='rgba(246,243,253,1)';ctx.beginPath();ctx.roundRect(w/2-pw/2,cy-16,pw,32,16);ctx.fill();
     ctx.textBaseline='middle';ft('✨ '+t(todayCard.wish),w/2,cy,'15px sans-serif','rgba(140,125,170,1)');ctx.textBaseline='alphabetic';cy+=40;

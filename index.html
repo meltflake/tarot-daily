@@ -97,7 +97,9 @@ h1{font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,var(--gold
 .reset-btn{background:none;border:1px solid rgba(255,255,255,.15);color:var(--text-soft);padding:.5rem 1.5rem;border-radius:20px;font-size:.78rem;cursor:pointer;margin-top:.8rem;font-family:inherit}
 .reset-btn:hover{border-color:var(--purple);color:var(--purple)}
 
-.question-box{margin-bottom:1.2rem}
+.mode-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-soft);padding:.55rem 1.3rem;border-radius:25px;font-size:.88rem;cursor:pointer;font-family:inherit;transition:all .3s}
+.mode-btn.active{background:linear-gradient(135deg,rgba(167,139,250,.3),rgba(244,114,182,.2));border-color:var(--purple);color:#fff;box-shadow:0 0 12px rgba(167,139,250,.2)}
+.question-box{margin-bottom:1.2rem;animation:fadeUp .3s ease}
 .question-box input{width:100%;padding:.7rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;color:var(--text);font-size:.9rem;font-family:inherit;outline:none;text-align:center}
 .question-box input:focus{border-color:var(--purple);box-shadow:0 0 15px rgba(167,139,250,.15)}
 .question-box input::placeholder{color:var(--text-soft)}
@@ -113,9 +115,13 @@ h1{font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,var(--gold
   <div class="subtitle">今天的宇宙想对你说什么？</div>
   <div class="date" id="dateDisplay"></div>
 
-  <div class="question-box" id="questionBox">
-    <input type="text" id="questionInput" placeholder="💭 有心事？写下来抽专属签..." maxlength="50">
-    <div class="question-hint">留空直接翻牌 = 每日一签 ✨</div>
+  <div style="display:flex;gap:.5rem;justify-content:center;margin-bottom:1rem">
+    <button class="mode-btn active" id="btnDaily" onclick="setMode('daily')">🌅 每日一签</button>
+    <button class="mode-btn" id="btnQuestion" onclick="setMode('question')">🔮 心事求签</button>
+  </div>
+  <div class="question-box" id="questionBox" style="display:none">
+    <input type="text" id="questionInput" placeholder="写下你的心事或问题..." maxlength="50">
+    <div class="question-hint">比如：我该不该换工作？这段感情值得继续吗？</div>
   </div>
 
   <div class="card-container" id="cardContainer" onclick="flipCard()">
@@ -357,18 +363,39 @@ document.getElementById('dateDisplay').textContent =
 var flipped = false;
 var currentCard = todayCard;
 var currentQuestion = '';
+var currentMode = 'daily';
+
+function setMode(mode){
+  currentMode = mode;
+  document.getElementById('btnDaily').classList.toggle('active', mode==='daily');
+  document.getElementById('btnQuestion').classList.toggle('active', mode==='question');
+  document.getElementById('questionBox').style.display = mode==='question' ? 'block' : 'none';
+  if(mode==='question') document.getElementById('questionInput').focus();
+  if(flipped) resetCard();
+}
 
 function flipCard(){
   if(flipped){
-    // Tap again → reset to front, clear question, let user re-enter
+    // Tap again → reset
     resetCard();
-    document.getElementById('questionInput').value = '';
-    document.getElementById('questionInput').focus();
+    if(currentMode==='question'){
+      document.getElementById('questionInput').value = '';
+      document.getElementById('questionInput').focus();
+    }
     window.scrollTo({top:0,behavior:'smooth'});
     return;
   }
 
-  const q = document.getElementById('questionInput').value.trim();
+  const q = currentMode==='question' ? document.getElementById('questionInput').value.trim() : '';
+  if(currentMode==='question' && !q){
+    document.getElementById('questionInput').style.borderColor = '#f472b6';
+    document.getElementById('questionInput').placeholder = '请先写下你的问题哦 💭';
+    setTimeout(()=>{
+      document.getElementById('questionInput').style.borderColor = '';
+      document.getElementById('questionInput').placeholder = '写下你的心事或问题...';
+    }, 2000);
+    return;
+  }
   if(q){
     // Question mode: pick card based on question
     currentQuestion = q;

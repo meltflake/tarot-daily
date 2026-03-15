@@ -181,10 +181,14 @@ function shareCard(){
       kx+=kw+8;
     }
     ctx.textAlign='center';y+=42;
-    // Reading text - poetry style line breaks
+    // Reading text - poetry style: split by punctuation into short lines
     var msg=t(todayCard.msg);
-    var ey=wrapText(msg,cx,y,'16px -apple-system,sans-serif','rgba(80,70,105,1)',380,30);
-    y=ey+35;
+    var poetryLines=msg.replace(/([，。！？；、])/g,'$1\n').split('\n').map(function(s){return s.trim()}).filter(function(s){return s});
+    ctx.font='15px -apple-system,sans-serif';ctx.fillStyle='rgba(80,70,105,1)';ctx.textAlign='center';
+    for(var pi=0;pi<poetryLines.length;pi++){
+      ctx.fillText(poetryLines[pi],cx,y);y+=28;
+    }
+    y+=15;
     // Affirmation
     ft('" '+t(todayCard.wish)+' "',cx,y,'14px -apple-system,sans-serif','rgba(150,135,175,1)');y+=48;
     // Lucky items

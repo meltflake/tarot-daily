@@ -183,9 +183,10 @@ var THINGS = [
   {name:{zh:'一杯奶茶',en:'Bubble tea'},icon:'🧋'},{name:{zh:'一块巧克力',en:'Chocolate'},icon:'🍫'},
 ];
 
-function getUserId(){var k='tarot_uid';var uid=localStorage.getItem(k);if(!uid){uid=Math.floor(Math.random()*900000000+100000000).toString();localStorage.setItem(k,uid)}return parseInt(uid)}
-function getDaySeed(){var d=new Date();var day=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();var uid=getUserId();return day*31+uid}
-function seededRandom(seed){var s=Math.abs(seed)%2147483647||1;return function(){s=(s*16807+0)%2147483647;return(s-1)/2147483646}}
+function getUserId(){var k='tarot_uid';var uid=localStorage.getItem(k);if(!uid){uid=Math.floor(Math.random()*90000+10000).toString();localStorage.setItem(k,uid)}return parseInt(uid)}
+function hashSeed(a,b){var h=2166136261;var s=a.toString()+'-'+b.toString();for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);h=h>>>0}return h||1}
+function getDaySeed(){var d=new Date();var day=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();var uid=getUserId();return hashSeed(day,uid)}
+function seededRandom(seed){var s=seed%2147483647||1;if(s<0)s+=2147483647;return function(){s=(s*16807+0)%2147483647;return(s-1)/2147483646}}
 
 function createStars(){
   var e=document.getElementById('stars');

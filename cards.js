@@ -183,8 +183,9 @@ var THINGS = [
   {name:{zh:'一杯奶茶',en:'Bubble tea'},icon:'🧋'},{name:{zh:'一块巧克力',en:'Chocolate'},icon:'🍫'},
 ];
 
-function getDaySeed(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()}
-function seededRandom(seed){var s=seed;return function(){s=(s*16807+0)%2147483647;return(s-1)/2147483646}}
+function getUserId(){var k='tarot_uid';var uid=localStorage.getItem(k);if(!uid){uid=Math.floor(Math.random()*900000000+100000000).toString();localStorage.setItem(k,uid)}return parseInt(uid)}
+function getDaySeed(){var d=new Date();var day=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();var uid=getUserId();return day*31+uid}
+function seededRandom(seed){var s=Math.abs(seed)%2147483647||1;return function(){s=(s*16807+0)%2147483647;return(s-1)/2147483646}}
 
 function createStars(){
   var e=document.getElementById('stars');
